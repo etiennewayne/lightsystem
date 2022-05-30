@@ -1,0 +1,236 @@
+<template>
+    <div>
+        <div class="section">
+
+            <div class="columns is-centered">
+                <div class="column is-6">
+                    <div class="box">
+                        
+                        <form @submit.prevent="submit">
+                            <div class="">
+                                <b-field label="Device" label-position="on-border" expanded>
+                                    <b-select v-model="fields.device" expanded>
+                                        <option v-for="(item, index) in devices" :key="index" :value="item.device_id">{{ item.device_name }} - {{ item.device_ip }}</option>
+                                    </b-select>
+                                </b-field>
+
+                                <b-field label="Schedule Name" label-position="on-border">
+                                    <b-input type="text" v-model="fields.schedule_name" placeholder="Schedule Name"></b-input>
+                                </b-field>
+    
+                                <b-field label="Select Date Time" grouped  expanded class="is-centered" label-position="on-border"
+                                        :type="this.errors.date_time ? 'is-danger':''"
+                                        :message="this.errors.date_time ? this.errors.date_time[0] : ''">
+                                    <b-datetimepicker expanded
+                                        v-model="fields.date_time"
+                                        placeholder="Type or select a date..."
+                                        icon="calendar-today"
+                                        :locale="locale"
+                                        editable>
+                                    </b-datetimepicker>
+                                </b-field>
+    
+                                <b-field label="System Action" label-position="on-border" expanded>
+                                    <b-select v-model="fields.system_action" expanded>
+                                        <option value="ON">ON</option>
+                                        <option value="OFF">OFF</option>
+                                    </b-select>
+                                </b-field>
+
+                                <b-field label="Action Type" label-position="on-border" expanded>
+                                    <b-select v-model="fields.action_type" expanded>
+                                        <option value="REPEAT">REPEAT</option>
+                                        <option value="SPECIFIC">SPECIFIC</option>
+                                    </b-select>
+                                </b-field>
+    
+                            </div>
+
+                            <div class="buttons mt-4">
+                                <button :class="btnClass">SAVE</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div><!--close column-->
+            </div>
+        </div><!--section div-->
+
+    </div>
+</template>
+
+<script>
+export default {
+
+    props: ['propId'],
+
+    data(){
+        return{
+
+            locale: undefined, // Browser locale
+
+            global_id : 0,
+
+            search: {
+                from_date: '',
+                to_date: '',
+            },
+
+            isModalCreate: false,
+
+            fields: {
+                schedule_name: null,
+                date_from: null,
+                date_to: null,
+            },
+            errors: {},
+
+            btnClass: {
+                'is-info': true,
+                'button': true,
+                'is-loading':false,
+            },
+
+            devices: [],
+        }
+    },
+
+    methods: {
+
+        loadDevices(){
+            axios.get('/load-devices').then(res=>{
+                this.devices = res.data;
+            });
+        },
+        
+        clearFields(){
+            this.fields = {
+                schedule_name: null,
+                date_from: null,
+                date_to: null,
+            };
+            this.errors = {};
+        },
+
+
+        //alert box ask for deletion
+        confirmDelete(delete_id) {
+            this.$buefy.dialog.confirm({
+                title: 'DELETE!',
+                type: 'is-danger',
+                message: 'Are you sure you want to delete this data?',
+                cancelText: 'Cancel',
+                confirmText: 'Delete',
+                onConfirm: () => this.deleteSubmit(delete_id)
+            });
+        },
+        //execute delete after confirming
+        deleteSubmit(delete_id) {
+            axios.delete('/schedules/' + delete_id).then(res => {
+                this.loadAsyncData();
+            }).catch(err => {
+                if (err.response.status === 422) {
+                    this.errors = err.response.data.errors;
+                }
+            });
+        },
+
+        //update code here
+        getData: function(){
+            this.clearFields();
+
+            //nested axios for getting the address 1 by 1 or request by request
+            axios.get('/schedules/' + this.global_id).then(res=>{
+             
+                this.fields.date_time = new Date(res.data.date_time);
+                this.fields.device = res.data.device_id;
+                this.fields.schedule_name = res.data.schedule_name;
+                this.fields.system_action = res.data.system_action;
+                this.fields.action_type = res.data.action_type;
+
+
+            });
+        },
+
+        submit: function(){
+
+            //this.fields.app_date = new Date(this.fields.appointment_date).toLocaleDateString();
+            //this.fields.app_time = new Date(this.fields.appointment_date).toLocaleTimeString();
+
+            if(this.global_id > 0){
+                //update
+                axios.put('/schedules/'+this.global_id, this.fields).then(res=>{
+                    if(res.data.status === 'updated'){
+                        this.$buefy.dialog.alert({
+                            title: 'UPDATED!',
+                            message: 'Successfully updated.',
+                            type: 'is-success',
+                            onConfirm: () => {
+                                window.location = '/schedules';
+                            }
+                        })
+                    }
+                }).catch(err=>{
+                    if(err.response.status === 422){
+                        this.errors = err.response.data.errors;
+                    }
+                })
+
+            }else{
+
+                //INSERT HERE
+                axios.post('/schedules', this.fields).then(res=>{
+                    if(res.data.status === 'saved'){
+                        this.$buefy.dialog.alert({
+                            title: 'SAVED!',
+                            message: 'Successfully saved.',
+                            type: 'is-success',
+                            confirmText: 'OK',
+                            onConfirm: () => {
+                                window.location = '/schedules';
+                            }
+                        })
+                    }
+                }).catch(err=>{
+                    if(err.response.status === 422){
+                        this.errors = err.response.data.errors;
+                    }
+                });
+            }
+        },
+
+
+        initData(){
+            this.global_id = parseInt(this.propId);
+            if(this.global_id > 0){
+                this.getData();
+            }
+        },
+
+    },
+
+    mounted() {
+        this.loadDevices();
+        this.initData();
+    }
+
+}
+</script>
+
+<style scoped>
+    .approved{
+        font-weight: bold;
+        color: green;
+    }
+    .cancelled{
+        font-weight: bold;
+        color: red;
+    }
+
+    .pending{
+        font-weight: bold;
+        color: #1a73bd;
+    }
+</style>
+ 
+ 
