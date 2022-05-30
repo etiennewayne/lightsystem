@@ -24,16 +24,16 @@
 
                             <b-menu-item icon="information-outline" label="Dashboard" tag="a" href="/cpanel"></b-menu-item>
                             
-                            <b-menu-item label="Device" icon="cellphone-link" tag="a" href="/devices"></b-menu-item>
+                            <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Device" icon="cellphone-link" tag="a" href="/devices"></b-menu-item>
 
                             <b-menu-item label="Schedule" icon="domain" tag="a" href="/schedules"></b-menu-item>
                             
-                            <b-menu-item label="User" icon="account" tag="a" href="/users"></b-menu-item>
+                            <b-menu-item label="User" icon="account" tag="a" v-if="user.role === 'ADMINISTRATOR'" href="/users"></b-menu-item>
                             
                         </b-menu-list>
 
                         <b-menu-list label="Actions">
-                            <b-menu-item label="System Logs" icon="post-outline" tag="a" href="/syslogs"></b-menu-item>
+                            <b-menu-item label="System Logs" v-if="user.role === 'ADMINISTRATOR'" icon="post-outline" tag="a" href="/syslogs"></b-menu-item>
                             <b-menu-item @click="logout" icon="logout" label="Logout"></b-menu-item>
                         </b-menu-list>
                     </b-menu>

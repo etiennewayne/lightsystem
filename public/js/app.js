@@ -34547,14 +34547,16 @@ var render = function () {
                         },
                       }),
                       _vm._v(" "),
-                      _c("b-menu-item", {
-                        attrs: {
-                          label: "Device",
-                          icon: "cellphone-link",
-                          tag: "a",
-                          href: "/devices",
-                        },
-                      }),
+                      _vm.user.role === "ADMINISTRATOR"
+                        ? _c("b-menu-item", {
+                            attrs: {
+                              label: "Device",
+                              icon: "cellphone-link",
+                              tag: "a",
+                              href: "/devices",
+                            },
+                          })
+                        : _vm._e(),
                       _vm._v(" "),
                       _c("b-menu-item", {
                         attrs: {
@@ -34565,14 +34567,16 @@ var render = function () {
                         },
                       }),
                       _vm._v(" "),
-                      _c("b-menu-item", {
-                        attrs: {
-                          label: "User",
-                          icon: "account",
-                          tag: "a",
-                          href: "/users",
-                        },
-                      }),
+                      _vm.user.role === "ADMINISTRATOR"
+                        ? _c("b-menu-item", {
+                            attrs: {
+                              label: "User",
+                              icon: "account",
+                              tag: "a",
+                              href: "/users",
+                            },
+                          })
+                        : _vm._e(),
                     ],
                     1
                   ),
@@ -34581,14 +34585,16 @@ var render = function () {
                     "b-menu-list",
                     { attrs: { label: "Actions" } },
                     [
-                      _c("b-menu-item", {
-                        attrs: {
-                          label: "System Logs",
-                          icon: "post-outline",
-                          tag: "a",
-                          href: "/syslogs",
-                        },
-                      }),
+                      _vm.user.role === "ADMINISTRATOR"
+                        ? _c("b-menu-item", {
+                            attrs: {
+                              label: "System Logs",
+                              icon: "post-outline",
+                              tag: "a",
+                              href: "/syslogs",
+                            },
+                          })
+                        : _vm._e(),
                       _vm._v(" "),
                       _c("b-menu-item", {
                         attrs: { icon: "logout", label: "Logout" },
