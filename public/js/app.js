@@ -8757,6 +8757,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -30914,7 +30915,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.approved[data-v-fbce1f9c]{\n    font-weight: bold;\n    color: green;\n}\n.cancelled[data-v-fbce1f9c]{\n    font-weight: bold;\n    color: red;\n}\n.pending[data-v-fbce1f9c]{\n    font-weight: bold;\n    color: #1a73bd;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.light-on[data-v-fbce1f9c]{\n    font-weight: bold;\n    color: green;\n}\n.light-off[data-v-fbce1f9c]{\n    font-weight: bold;\n    color: red;\n}\n.pending[data-v-fbce1f9c]{\n    font-weight: bold;\n    color: #1a73bd;\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -35540,11 +35541,13 @@ var render = function () {
                         key: "default",
                         fn: function (props) {
                           return [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(props.row.system_action) +
-                                "\n                            "
-                            ),
+                            props.row.system_action === "ON"
+                              ? _c("span", { staticClass: "light-on" }, [
+                                  _vm._v("ON"),
+                                ])
+                              : _c("span", { staticClass: "light-off" }, [
+                                  _vm._v("OFF"),
+                                ]),
                           ]
                         },
                       },

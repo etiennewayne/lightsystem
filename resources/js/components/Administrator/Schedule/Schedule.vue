@@ -78,7 +78,8 @@
                                 </b-table-column>
 
                                 <b-table-column field="system_action" label="System Action" v-slot="props">
-                                    {{ props.row.system_action }}
+                                     <span v-if="props.row.system_action === 'ON'" class="light-on">ON</span>
+                                    <span v-else class="light-off">OFF</span>
                                 </b-table-column>
 
                                 <b-table-column field="action_type" label="Action Type" v-slot="props">
@@ -276,11 +277,11 @@ export default {
 </script>
 
 <style scoped>
-    .approved{
+    .light-on{
         font-weight: bold;
         color: green;
     }
-    .cancelled{
+    .light-off{
         font-weight: bold;
         color: red;
     }
@@ -289,4 +290,5 @@ export default {
         font-weight: bold;
         color: #1a73bd;
     }
+    
 </style>
