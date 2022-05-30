@@ -8749,6 +8749,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -35445,6 +35453,42 @@ var render = function () {
                             _vm._v(
                               "\n                                " +
                                 _vm._s(props.row.schedule_id) +
+                                "\n                            "
+                            ),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
+                    attrs: { field: "device_name", label: "Device Name" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(props.row.device.device_name) +
+                                "\n                            "
+                            ),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
+                    attrs: { field: "device_ip", label: "Device IP" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(props.row.device.device_ip) +
                                 "\n                            "
                             ),
                           ]

@@ -61,6 +61,14 @@
                                     {{ props.row.schedule_id }}
                                 </b-table-column>
 
+                                <b-table-column field="device_name" label="Device Name" v-slot="props">
+                                    {{ props.row.device.device_name }}
+                                </b-table-column>
+
+                                <b-table-column field="device_ip" label="Device IP" v-slot="props">
+                                    {{ props.row.device.device_ip }}
+                                </b-table-column>
+
                                 <b-table-column field="schedule_name" label="Schedule Name" v-slot="props">
                                     {{ props.row.schedule_name }}
                                 </b-table-column>
