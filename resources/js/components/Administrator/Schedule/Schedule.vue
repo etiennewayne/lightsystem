@@ -78,7 +78,7 @@
                                 </b-table-column>
 
                                 <b-table-column field="system_action" label="System Action" v-slot="props">
-                                     <span v-if="props.row.system_action === 'ON'" class="light-on">ON</span>
+                                    <span v-if="props.row.system_action === 'ON'" class="light-on">ON</span>
                                     <span v-else class="light-off">OFF</span>
                                 </b-table-column>
 

@@ -14,7 +14,7 @@
 								<div class="box-head">
 									CONTROLS
 								</div>
-								<b-field v-for="(item, index) in devices" :key="index" :label="item.device_name">
+								<b-field v-for="(item, index) in buildings" :key="index" :label="item.device_name">
 									<b-switch :value="false" @input="invokeSwitch(item, index)" v-model="esp[index]" type="is-success">
 										{{ item.device_ip }}
 									</b-switch>
@@ -40,7 +40,7 @@ export default {
 			fields: {},
 			error: {},
 
-			devices: [],
+			buildings: [],
 
 			esp: [],
 		}
@@ -65,8 +65,8 @@ export default {
 		},
 
 		initData(){
-			axios.get('/load-devices').then(res=>{
-				this.devices = res.data;
+			axios.get('/load-switch-buildings').then(res=>{
+				this.buildings = res.data;
 			})
 		}
 	},

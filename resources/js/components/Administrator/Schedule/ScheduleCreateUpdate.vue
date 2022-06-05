@@ -147,8 +147,6 @@ export default {
                 this.fields.schedule_name = res.data.schedule_name;
                 this.fields.system_action = res.data.system_action;
                 this.fields.action_type = res.data.action_type;
-
-
             });
         },
 

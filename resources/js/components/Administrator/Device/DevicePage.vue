@@ -3,7 +3,7 @@
         <div class="section">
 
             <div class="columns is-centered">
-                <div class="column is-10">
+                <div class="columns">
                     <div class="box">
                         <div class="is-flex is-justify-content-center mb-2" style="font-size: 20px; font-weight: bold;">LIST OF DEVICES</div>
 
@@ -59,6 +59,14 @@
 
                             <b-table-column field="device_id" label="ID" v-slot="props">
                                 {{ props.row.device_id }}
+                            </b-table-column>
+
+                            <b-table-column field="building" label="Building Name" v-slot="props">
+                                {{ props.row.building.building_name }}
+                            </b-table-column>
+
+                            <b-table-column field="floor" label="Floor Name" v-slot="props">
+                                {{ props.row.floor.floor_name }}
                             </b-table-column>
 
                             <b-table-column field="device_name" label="Device Name" v-slot="props">
@@ -119,13 +127,31 @@
                         <button
                             type="button"
                             class="delete"
-                            @click="isModalCreate = false"/>
+                            @click="isModalCreate = false" />
                     </header>
 
                     <section class="modal-card-body">
                         <div class="">
                             <div class="columns">
                                 <div class="column">
+
+                                    <b-field label="Building" expanded
+                                             :type="this.errors.building ? 'is-danger':''"
+                                             :message="this.errors.building ? this.errors.building[0] : ''">
+                                        <b-select v-model="fields.building" expanded
+                                                placeholder="Building" required>
+                                                <option v-for="(item, index) in buildings" :key="index" :value="item.building_id">{{ item.building_name }}</option>
+                                        </b-select>
+                                    </b-field>
+
+                                    <b-field label="Floor" expanded
+                                             :type="this.errors.floor ? 'is-danger':''"
+                                             :message="this.errors.floor ? this.errors.floor[0] : ''">
+                                        <b-select v-model="fields.floor" expanded
+                                                placeholder="Floor" required>
+                                                <option v-for="(item, index) in floors" :key="index" :value="item.floor_id">{{ item.floor_name }}</option>
+                                        </b-select>
+                                    </b-field>
 
                                     <b-field label="Device Name"
                                              :type="this.errors.device_name ? 'is-danger':''"
@@ -195,6 +221,7 @@ export default {
     components: {
         MD5
     },
+
     data(){
         return{
             data: [],
@@ -227,6 +254,9 @@ export default {
                 'button': true,
                 'is-loading':false,
             },
+
+            buildings: [],
+            floors: [],
 
         }
     },
@@ -323,6 +353,9 @@ export default {
             //nested axios for getting the address 1 by 1 or request by request
             axios.get('/devices/'+data_id).then(res=>{
                 this.fields = res.data;
+                this.fields.building = res.data.building.building_id;
+                this.fields.floor = res.data.floor.floor_id;
+
                 console.log(this.fields);
             });
         },
@@ -396,11 +429,25 @@ export default {
             this.fields.device_token_off = myhash.toString();
         },
 
+        loadBuildings(){
+            axios.get('/load-buildings').then(res=>{
+                this.buildings = res.data;
+            })
+        },
+
+        loadFloors(){
+            axios.get('/load-floors').then(res=>{
+                this.floors = res.data;
+            })
+        }
+
     },
 
     mounted() {
 
         this.loadAsyncData();
+        this.loadBuildings();
+        this.loadFloors();
     }
 
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSyslogsTable extends Migration
+class CreateFloorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateSyslogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('syslogs', function (Blueprint $table) {
-            $table->id();
-            $table->text('syslog')->nullable();
-            $table->string('username')->nullable();
-            $table->string('action_type')->nullable(); //if on or off record
+        Schema::create('floors', function (Blueprint $table) {
+            $table->id('floor_id');
 
+            $table->string('floor_name')->nullable();
+            
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateSyslogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('syslogs');
+        Schema::dropIfExists('floors');
     }
 }

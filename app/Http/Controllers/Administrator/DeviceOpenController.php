@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 
 use App\Models\Device;
+use App\Models\Building;
+
 use App\Http\Controllers\Controller;
 
 class DeviceOpenController extends Controller
@@ -13,8 +15,12 @@ class DeviceOpenController extends Controller
     //
 
 
-    public function loadDevices(){
-        return Device::orderBy('device_name', 'asc')
+    public function loadSwitchBuildings(Request $req){
+
+        return Building::with(['device'])
+            ->whereHas('device', function ($q) use ($req) {
+                $q->where('device_name', 'like', $req->device . '%');
+            })
             ->get();
     }
 

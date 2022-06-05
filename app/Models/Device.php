@@ -12,8 +12,17 @@ class Device extends Model
     protected $table = 'devices';
     protected $primaryKey = 'device_id';
 
-    protected $fillable = ['device_name', 'device_ip', 
+    protected $fillable = ['building_id', 'floor_id', 'device_name', 'device_ip', 
         'device_token_on', 
         'device_token_off', 'ntuser'];
+
+
+    public function building(){
+        return $this->hasOne(Building::class, 'building_id', 'building_id');
+    }
+
+    public function floor(){
+        return $this->hasOne(Floor::class, 'floor_id', 'floor_id');
+    }
 
 }

@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Session;
 
 use Illuminate\Support\Facades\DB;
 
+
+use App\Models\Building;
+use App\Models\Floor;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -65,7 +69,7 @@ Route::resource('/cpanel', App\Http\Controllers\Administrator\CpanelController::
 Route::resource('/devices', App\Http\Controllers\Administrator\DeviceController::class);
 Route::get('/get-devices', [App\Http\Controllers\Administrator\DeviceController::class, 'getDevices']);
 
-Route::get('/load-devices', [App\Http\Controllers\Administrator\DeviceOpenController::class, 'loadDevices']);
+Route::get('/load-switch-buildings', [App\Http\Controllers\Administrator\DeviceOpenController::class, 'loadSwitchBuildings']);
 
 
 
@@ -104,7 +108,12 @@ Route::get('/get-my-profile', [App\Http\Controllers\User\MyProfileController::cl
 
 Route::get('/my-upcoming-appointment', [App\Http\Controllers\User\MyAppointmentController::class, 'upcomingAppointment']);
 
-
+Route::get('/load-buildings', function(){
+    return Building::all();
+});
+Route::get('/load-floors', function(){
+    return Floor::all();
+});
 
 
 
