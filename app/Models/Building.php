@@ -14,7 +14,7 @@ class Building extends Model
 
     protected $fillable = ['building_name'];
 
-    public function device(){
+    public function devices(){
         return $this->hasMany(Device::class, 'building_id', 'building_id');
     }
 

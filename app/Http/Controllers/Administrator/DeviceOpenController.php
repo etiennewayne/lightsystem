@@ -17,8 +17,8 @@ class DeviceOpenController extends Controller
 
     public function loadSwitchBuildings(Request $req){
 
-        return Building::with(['device'])
-            ->whereHas('device', function ($q) use ($req) {
+        return Building::with(['devices'])
+            ->whereHas('devices', function ($q) use ($req) {
                 $q->where('device_name', 'like', $req->device . '%');
             })
             ->get();

@@ -8,17 +8,20 @@
 
             <div class="hero-body">
                 <div class="container has-text-centered">
-                    <div class="columns is-centered">
-						<div class="column is-4">
+                    
+					<div class="columns is-centered" v-for="(item, index) in buildings" :key="index">
+						<div class="column is-6">
 							<div class="box">
+
 								<div class="box-head">
-									CONTROLS
+									{{ item.building_name }}
 								</div>
-								<b-field v-for="(item, index) in buildings" :key="index" :label="item.device_name">
-									<b-switch :value="false" @input="invokeSwitch(item, index)" v-model="esp[index]" type="is-success">
-										{{ item.device_ip }}
+								
+								<b-field v-for="(i, ix) in item.devices" :key="ix" :label="i.device_name">
+									<b-switch :value="false" @input="invokeSwitch(i, ix)" v-model="esp[ix]" type="is-success">
+										{{ i.device_ip }}
 									</b-switch>
-								</b-field> 
+								</b-field>
 							</div>
 						</div>
 					</div>
@@ -41,6 +44,8 @@ export default {
 			error: {},
 
 			buildings: [],
+
+
 
 			esp: [],
 		}
@@ -67,6 +72,7 @@ export default {
 		initData(){
 			axios.get('/load-switch-buildings').then(res=>{
 				this.buildings = res.data;
+				console.log(this.buildings);
 			})
 		}
 	},

@@ -65,6 +65,22 @@ Route::get('/init-user', function(){
 
 Route::resource('/cpanel', App\Http\Controllers\Administrator\CpanelController::class);
 
+//buildings
+Route::resource('/buildings', App\Http\Controllers\Administrator\BuildingController::class);
+Route::get('/get-buildings', [App\Http\Controllers\Administrator\BuildingController::class, 'getBuildings']);
+
+
+//floors
+Route::resource('/floors', App\Http\Controllers\Administrator\FloorController::class);
+Route::get('/get-floors', [App\Http\Controllers\Administrator\FloorController::class, 'getFloors']);
+
+
+//group roles
+Route::resource('/group-roles', App\Http\Controllers\Administrator\GroupRoleController::class);
+Route::get('/get-group-roles', [App\Http\Controllers\Administrator\GroupRoleController::class, 'getGroupRoles']);
+
+
+
 //devices
 Route::resource('/devices', App\Http\Controllers\Administrator\DeviceController::class);
 Route::get('/get-devices', [App\Http\Controllers\Administrator\DeviceController::class, 'getDevices']);

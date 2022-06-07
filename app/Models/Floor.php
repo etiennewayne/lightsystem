@@ -12,5 +12,5 @@ class Floor extends Model
     protected $table = 'floors';
     protected $primaryKey = 'floor_id';
 
-    protected $fillable = ['floors_name'];
+    protected $fillable = ['floor_name'];
 }

@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
            
             UserSeeder::class,
             BuildingSeeder::class,
+            GroupRoleSeeder::class,
             FloorSeeder::class,
             DeviceSeeder::class,
             ScheduleSeeder::class,

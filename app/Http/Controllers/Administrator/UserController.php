@@ -25,7 +25,7 @@ class UserController extends Controller
     }
 
     public function index(){
-        return view('administrator.user'); //blade.php
+        return view('panel.user'); //blade.php
     }
 
     public function getUsers(Request $req){

@@ -23,7 +23,13 @@
                         <b-menu-list label="Menu">
 
                             <b-menu-item icon="information-outline" label="Dashboard" tag="a" href="/cpanel"></b-menu-item>
+
+                            <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Building" icon="cellphone-link" tag="a" href="/buildings"></b-menu-item>
+
+                            <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Floor" icon="cellphone-link" tag="a" href="/floors"></b-menu-item>
                             
+                            <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Group Role" icon="cellphone-link" tag="a" href="/group-roles"></b-menu-item>
+
                             <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Device" icon="cellphone-link" tag="a" href="/devices"></b-menu-item>
 
                             <b-menu-item label="Schedule" icon="domain" tag="a" href="/schedules"></b-menu-item>
