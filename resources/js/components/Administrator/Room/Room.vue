@@ -5,7 +5,7 @@
             <div class="columns is-centered">
                 <div class="columns">
                     <div class="box">
-                        <div class="is-flex is-justify-content-center mb-2" style="font-size: 20px; font-weight: bold;">LIST OF DEVICES</div>
+                        <div class="is-flex is-justify-content-center mb-2" style="font-size: 20px; font-weight: bold;">LIST OF ROOMS</div>
 
                         <div class="level">
                             <div class="level-left">
@@ -28,7 +28,7 @@
                                 <div class="level-item">
                                     <b-field label="Search">
                                         <b-input type="text"
-                                                 v-model="search.device" placeholder="Search Device"
+                                                 v-model="search.room" placeholder="Search Room"
                                                  @keyup.native.enter="loadAsyncData"/>
                                         <p class="control">
                                              <b-tooltip label="Search" type="is-success">
@@ -57,45 +57,29 @@
                             :default-sort-direction="defaultSortDirection"
                             @sort="onSort">
 
-                            <b-table-column field="device_id" label="ID" v-slot="props">
-                                {{ props.row.device_id }}
+                            <b-table-column field="floor_id" label="ID" v-slot="props">
+                                {{ props.row.floor_id }}
                             </b-table-column>
 
                             <b-table-column field="building" label="Building Name" v-slot="props">
-                                {{ props.row.room.building_name }}
+                                {{ props.row.building.building_name }}
                             </b-table-column>
 
-                            <b-table-column field="floor" label="Floor Name" v-slot="props">
-                                {{ props.row.room.floor_name }}
+                            <b-table-column field="floor_name" label="Floor Name" v-slot="props">
+                                {{ props.row.floor.floor_name }}
                             </b-table-column>
 
-                             <b-table-column field="room" label="Room" v-slot="props">
-                                {{ props.row.room.room }}
-                            </b-table-column>
-
-                            <b-table-column field="device_name" label="Device Name" v-slot="props">
-                                {{ props.row.device_name }}
-                            </b-table-column>
-
-                            <b-table-column field="device_ip" label="Device IP" v-slot="props">
-                                {{ props.row.device_ip }}
-                            </b-table-column>
-
-                            <b-table-column field="device_token_on" label="Device Token ON" v-slot="props">
-                                {{ props.row.device_token_on | truncate(10) }}
-                            </b-table-column>
-
-                            <b-table-column field="device_token_off" label="Device Token OFF" v-slot="props">
-                                {{ props.row.device_token_off | truncate(10) }}
+                            <b-table-column field="room" label="Room" v-slot="props">
+                                {{ props.row.room }}
                             </b-table-column>
 
                             <b-table-column label="Action" v-slot="props">
                                 <div class="is-flex">
                                     <b-tooltip label="Edit" type="is-warning">
-                                        <b-button class="button is-small is-warning mr-1" tag="a" icon-right="pencil" @click="getData(props.row.device_id)"></b-button>
+                                        <b-button class="button is-small is-warning mr-1" tag="a" icon-right="pencil" @click="getData(props.row.room_id)"></b-button>
                                     </b-tooltip>
                                     <b-tooltip label="Delete" type="is-danger">
-                                        <b-button class="button is-small is-danger mr-1" icon-right="delete" @click="confirmDelete(props.row.device_id)"></b-button>
+                                        <b-button class="button is-small is-danger mr-1" icon-right="delete" @click="confirmDelete(props.row.room_id)"></b-button>
                                     </b-tooltip>
                                 </div>
                             </b-table-column>
@@ -127,7 +111,7 @@
             <form @submit.prevent="submit">
                 <div class="modal-card">
                     <header class="modal-card-head">
-                        <p class="modal-card-title">Office Information</p>
+                        <p class="modal-card-title">Room Information</p>
                         <button
                             type="button"
                             class="delete"
@@ -139,52 +123,31 @@
                             <div class="columns">
                                 <div class="column">
 
-                                    <b-field label="Room" expanded
-                                             :type="this.errors.room ? 'is-danger':''"
-                                             :message="this.errors.room ? this.errors.room[0] : ''">
-                                        <b-select v-model="fields.room" expanded
-                                                placeholder="Room" required>
-                                                <option v-for="(item, index) in rooms" :key="index" :value="item.room_id">{{ item.room }}</option>
+                                    <b-field label="Building" expanded
+                                             :type="this.errors.building ? 'is-danger':''"
+                                             :message="this.errors.building ? this.errors.building[0] : ''">
+                                        <b-select v-model="fields.building" placeholder="Building" required expanded>
+                                            <option v-for="(item, index) in buildings" :key="index" :value="item.building_id">{{ item.building_name }}</option>
                                         </b-select>
                                     </b-field>
 
-                                    <b-field label="Device Name"
-                                             :type="this.errors.device_name ? 'is-danger':''"
-                                             :message="this.errors.device_name ? this.errors.device_name[0] : ''">
-                                        <b-input v-model="fields.device_name"
-                                                 placeholder="Device Name" required>
+                                    <b-field label="Floor" expanded
+                                             :type="this.errors.floor ? 'is-danger':''"
+                                             :message="this.errors.floor ? this.errors.floor[0] : ''">
+                                        <b-select v-model="fields.floor" placeholder="Building" required expanded>
+                                            <option v-for="(item, index) in floors" :key="index" :value="item.floor_id">{{ item.floor_name }}</option>
+                                        </b-select>
+                                    </b-field>
+
+
+                                    <b-field label="Room"
+                                             :type="this.errors.room ? 'is-danger':''"
+                                             :message="this.errors.room ? this.errors.room[0] : ''">
+                                        <b-input v-model="fields.room"
+                                                 placeholder="Room" required>
                                         </b-input>
                                     </b-field>
 
-                                    <b-field label="Device IP"
-                                             :type="this.errors.device_ip ? 'is-danger':''"
-                                             :message="this.errors.device_ip ? this.errors.device_ip[0] : ''">
-                                        <b-input v-model="fields.device_ip"
-                                                 placeholder="Device IP" required>
-                                        </b-input>
-                                    </b-field>
-
-                                    <b-field label="Device Token ON" expanded
-                                             :type="this.errors.device_token_on ? 'is-danger':''"
-                                             :message="this.errors.device_token_on ? this.errors.device_token_on[0] : ''">
-                                        <b-input v-model="fields.device_token_on" expanded
-                                                 placeholder="Device Token" required>
-                                        </b-input>
-                                        <p class="control">
-                                            <b-button type="is-info" label="..." @click="makeTokenOn"></b-button>
-                                        </p>
-                                    </b-field>
-
-                                    <b-field label="Device Token OFF" expanded
-                                             :type="this.errors.device_token_off ? 'is-danger':''"
-                                             :message="this.errors.device_token_off ? this.errors.device_token_off[0] : ''">
-                                        <b-input v-model="fields.device_token_off" expanded
-                                                 placeholder="Device Token" required>
-                                        </b-input>
-                                        <p class="control">
-                                            <b-button type="is-info" label="..." @click="makeTokenOff"></b-button>
-                                        </p>
-                                    </b-field>
                                 </div>
                             </div>
                         </div>
@@ -209,20 +172,16 @@
 
 <script>
 
- import MD5 from "crypto-js/md5";
 
 export default {
 
-    components: {
-        MD5
-    },
 
     data(){
         return{
             data: [],
             total: 0,
             loading: false,
-            sortField: 'device_id',
+            sortField: 'room_id',
             sortOrder: 'desc',
             page: 1,
             perPage: 5,
@@ -231,27 +190,24 @@ export default {
             global_id : 0,
 
             search: {
-                device: '',
+                room: '',
             },
 
             isModalCreate: false,
 
             fields: {
-                device_name : null,
-                device_ip: null,
-                device_token_on: null,
-                device_token_off: null,
+                floor_name : null
             },
             errors: {},
+
+            buildings: [],
+            floors: [],
 
             btnClass: {
                 'is-success': true,
                 'button': true,
                 'is-loading':false,
             },
-
-      
-            rooms: [],
 
         }
     },
@@ -263,13 +219,13 @@ export default {
         loadAsyncData() {
             const params = [
                 `sort_by=${this.sortField}.${this.sortOrder}`,
-                `device=${this.search.device}`,
+                `room=${this.search.room}`,
                 `perpage=${this.perPage}`,
                 `page=${this.page}`
             ].join('&')
 
             this.loading = true
-            axios.get(`/get-devices?${params}`)
+            axios.get(`/get-rooms?${params}`)
                 .then(({ data }) => {
                     this.data = [];
                     let currentTotal = data.total
@@ -330,7 +286,7 @@ export default {
         },
         //execute delete after confirming
         deleteSubmit(delete_id) {
-            axios.delete('/devices/' + delete_id).then(res => {
+            axios.delete('/rooms/' + delete_id).then(res => {
                 this.loadAsyncData();
             }).catch(err => {
                 if (err.response.status === 422) {
@@ -345,21 +301,18 @@ export default {
             this.global_id = data_id;
             this.isModalCreate = true;
 
-            //nested axios for getting the address 1 by 1 or request by request
-            axios.get('/devices/'+data_id).then(res=>{
+            axios.get('/rooms/'+data_id).then(res=>{
                 this.fields = res.data;
-                this.fields.room = res.data.room.room_id;
+                
+                this.fields.building = res.data.building.building_id;
+                this.fields.floor = res.data.floor.floor_id;
 
             });
         },
 
         clearFields(){
             this.fields = {
-                device_name : null,
-                device_ip: null,
-                device_token_on: null,
-                device_token_off: null,
-
+                floor_name : null,
             };
         },
 
@@ -367,7 +320,7 @@ export default {
         submit: function(){
             if(this.global_id > 0){
                 //update
-                axios.put('/devices/'+this.global_id, this.fields).then(res=>{
+                axios.put('/rooms/'+this.global_id, this.fields).then(res=>{
                     if(res.data.status === 'updated'){
                         this.$buefy.dialog.alert({
                             title: 'UPDATED!',
@@ -388,7 +341,7 @@ export default {
                 })
             }else{
                 //INSERT HERE
-                axios.post('/devices', this.fields).then(res=>{
+                axios.post('/rooms', this.fields).then(res=>{
                     if(res.data.status === 'saved'){
                         this.$buefy.dialog.alert({
                             title: 'SAVED!',
@@ -411,32 +364,27 @@ export default {
             }
         },
 
-
-        makeTokenOn: function(){
-            let myhash = MD5(new Date().toLocaleDateString() + new Date().toLocaleTimeString());
-            this.fields.device_token_on = myhash.toString();
-        },
-
-        makeTokenOff: function(){
-            let myhash = MD5(new Date().toLocaleDateString() + new Date().toLocaleTimeString());
-            this.fields.device_token_off = myhash.toString();
-        },
-
-        loadBuildings(){
-            axios.get('/load-open-rooms').then(res=>{
-                this.rooms = res.data;
+        loadOpenBuildings(){
+            axios.get('/load-buildings').then(res=>{
+                this.buildings = res.data;
             })
         },
+        loadOpenFloors(){
+             axios.get('/load-floors').then(res=>{
+                this.floors = res.data;
+            })
+        }
 
 
+      
 
     },
 
     mounted() {
-
         this.loadAsyncData();
-        this.loadBuildings();
-        this.loadFloors();
+        this.loadOpenBuildings();
+        this.loadOpenFloors();
+
     }
 
 }

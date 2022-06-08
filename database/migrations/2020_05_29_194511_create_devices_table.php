@@ -16,11 +16,14 @@ class CreateDevicesTable extends Migration
         Schema::create('devices', function (Blueprint $table) {
             $table->id('device_id');
 
-            $table->unsignedBigInteger('building_id');
-            $table->foreign('building_id')->references('building_id')->on('buildings');
+            // $table->unsignedBigInteger('building_id');
+            // $table->foreign('building_id')->references('building_id')->on('buildings');
 
-            $table->unsignedBigInteger('floor_id');
-            $table->foreign('floor_id')->references('floor_id')->on('floors');
+            // $table->unsignedBigInteger('floor_id');
+            // $table->foreign('floor_id')->references('floor_id')->on('floors');
+
+            $table->unsignedBigInteger('room_id');
+            $table->foreign('room_id')->references('room_id')->on('rooms');
 
             $table->string('device_name')->nullable();
             $table->string('device_ip')->nullable();

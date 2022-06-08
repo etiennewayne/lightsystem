@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Building;
 use App\Models\Floor;
+use App\Models\Room;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +77,10 @@ Route::get('/get-buildings', [App\Http\Controllers\Administrator\BuildingControl
 Route::resource('/floors', App\Http\Controllers\Administrator\FloorController::class);
 Route::get('/get-floors', [App\Http\Controllers\Administrator\FloorController::class, 'getFloors']);
 
+//rooms
+Route::resource('/rooms', App\Http\Controllers\Administrator\RoomController::class);
+Route::get('/get-rooms', [App\Http\Controllers\Administrator\RoomController::class, 'getRooms']);
+
 
 //group roles
 Route::resource('/group-roles', App\Http\Controllers\Administrator\GroupRoleController::class);
@@ -129,6 +136,10 @@ Route::get('/load-buildings', function(){
 });
 Route::get('/load-floors', function(){
     return Floor::all();
+});
+
+Route::get('/load-open-rooms', function(){
+    return Room::orderBy('room', 'asc')->get();
 });
 
 

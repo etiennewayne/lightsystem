@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             BuildingSeeder::class,
             GroupRoleSeeder::class,
             FloorSeeder::class,
+            RoomSeeder::class,
             DeviceSeeder::class,
             ScheduleSeeder::class,
         ]);

@@ -33,7 +33,7 @@ class DeviceController extends Controller
     public function getDevices(Request $req){
         $sort = explode('.', $req->sort_by);
 
-        $data = Device::with(['building', 'floor'])
+        $data = Device::with(['room'])
             ->where('device_name', 'like', $req->device . '%')
             //->whereBetween('date_from', [$nDateFrom, $nDateTo])
             ->orderBy($sort[0], $sort[1])
@@ -43,15 +43,14 @@ class DeviceController extends Controller
     }
 
     public function show($id){
-        return Device::with(['building', 'floor'])
+        return Device::with(['room'])
             ->find($id);
     }
 
     public function store(Request $req){
        
         $req->validate([
-            'building' => ['required'],
-            'floor' => ['required'],
+            'room' => ['required'],
             'device_name' => ['required', 'unique:devices'],
             'device_ip' => ['required', 'unique:devices'],
             'device_token_on' => ['required'],
@@ -59,8 +58,7 @@ class DeviceController extends Controller
         ]);
 
         $data = Device::create([
-            'building_id' => $req->building,
-            'floor_id' => $req->floor,
+            'room_id' => $req->room,
             'device_name' => strtoupper($req->device_name),
             'device_ip' => $req->device_ip,
             'device_token_on' => $req->device_token_on,
@@ -82,8 +80,7 @@ class DeviceController extends Controller
     public function update(Request $req, $id){
 
         $req->validate([
-            'building' => ['required'],
-            'floor' => ['required'],
+            'room' => ['required'],
             'device_name' => ['required'],
             'device_ip' => ['required', 'unique:devices,device_ip,' . $id . ',device_id'],
             'device_token_on' => ['required'],
@@ -91,8 +88,7 @@ class DeviceController extends Controller
         ]);
         
         $data = Device::find($id);
-        $data->building_id = $req->building;
-        $data->floor_id = $req->floor;
+        $data->room_id = $req->room;
         $data->device_name = strtoupper($req->device_name);
         $data->device_ip = $req->device_ip;
         $data->device_token_on = $req->device_token_on;

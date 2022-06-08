@@ -54,7 +54,7 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
  */
 
 
- Vue.use(Buefy)
+Vue.use(Buefy)
 
 Vue.use(VueQrcodeReader); //https://gruhn.github.io/vue-qrcode-reader/demos/CustomTracking.html
 Vue.component(VueQrcode.name, VueQrcode);
@@ -67,6 +67,12 @@ Vue.filter('formatTime', function(value) {
     var ampm = H < 12 ? " AM" : " PM";
     timeString = h + timeString.substr(2, 3) + ampm;
     return timeString;
+});
+
+Vue.filter('truncate', function(value, length) {
+    return value.length > length ?
+        value.substr(0, length) + '...' :
+        value
 });
 
 

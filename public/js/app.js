@@ -8229,11 +8229,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -8266,8 +8261,7 @@ __webpack_require__.r(__webpack_exports__);
         'button': true,
         'is-loading': false
       },
-      buildings: [],
-      floors: []
+      rooms: []
     };
   },
   methods: {
@@ -8359,9 +8353,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/devices/' + data_id).then(function (res) {
         _this4.fields = res.data;
-        _this4.fields.building = res.data.building.building_id;
-        _this4.fields.floor = res.data.floor.floor_id;
-        console.log(_this4.fields);
+        _this4.fields.room = res.data.room.room_id;
       });
     },
     clearFields: function clearFields() {
@@ -8436,15 +8428,8 @@ __webpack_require__.r(__webpack_exports__);
     loadBuildings: function loadBuildings() {
       var _this6 = this;
 
-      axios.get('/load-buildings').then(function (res) {
-        _this6.buildings = res.data;
-      });
-    },
-    loadFloors: function loadFloors() {
-      var _this7 = this;
-
-      axios.get('/load-floors').then(function (res) {
-        _this7.floors = res.data;
+      axios.get('/load-open-rooms').then(function (res) {
+        _this6.rooms = res.data;
       });
     }
   },
@@ -9218,6 +9203,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -9258,6 +9246,392 @@ __webpack_require__.r(__webpack_exports__);
     fullName: function fullName() {
       return this.user.lname.toUpperCase() + ', ' + this.user.fname.toUpperCase();
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Room/Room.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Room/Room.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      data: [],
+      total: 0,
+      loading: false,
+      sortField: 'room_id',
+      sortOrder: 'desc',
+      page: 1,
+      perPage: 5,
+      defaultSortDirection: 'asc',
+      global_id: 0,
+      search: {
+        room: ''
+      },
+      isModalCreate: false,
+      fields: {
+        floor_name: null
+      },
+      errors: {},
+      buildings: [],
+      floors: [],
+      btnClass: {
+        'is-success': true,
+        'button': true,
+        'is-loading': false
+      }
+    };
+  },
+  methods: {
+    /*
+    * Load async data
+    */
+    loadAsyncData: function loadAsyncData() {
+      var _this = this;
+
+      var params = ["sort_by=".concat(this.sortField, ".").concat(this.sortOrder), "room=".concat(this.search.room), "perpage=".concat(this.perPage), "page=".concat(this.page)].join('&');
+      this.loading = true;
+      axios.get("/get-rooms?".concat(params)).then(function (_ref) {
+        var data = _ref.data;
+        _this.data = [];
+        var currentTotal = data.total;
+
+        if (data.total / _this.perPage > 1000) {
+          currentTotal = _this.perPage * 1000;
+        }
+
+        _this.total = currentTotal;
+        data.data.forEach(function (item) {
+          //item.release_date = item.release_date ? item.release_date.replace(/-/g, '/') : null
+          _this.data.push(item);
+        });
+        _this.loading = false;
+      })["catch"](function (error) {
+        _this.data = [];
+        _this.total = 0;
+        _this.loading = false;
+        throw error;
+      });
+    },
+
+    /*
+    * Handle page-change event
+    */
+    onPageChange: function onPageChange(page) {
+      this.page = page;
+      this.loadAsyncData();
+    },
+    onSort: function onSort(field, order) {
+      this.sortField = field;
+      this.sortOrder = order;
+      this.loadAsyncData();
+    },
+    setPerPage: function setPerPage() {
+      this.loadAsyncData();
+    },
+    openModal: function openModal() {
+      this.isModalCreate = true;
+      this.clearFields();
+      this.errors = {};
+    },
+    //alert box ask for deletion
+    confirmDelete: function confirmDelete(delete_id) {
+      var _this2 = this;
+
+      this.$buefy.dialog.confirm({
+        title: 'DELETE!',
+        type: 'is-danger',
+        message: 'Are you sure you want to delete this data?',
+        cancelText: 'Cancel',
+        confirmText: 'Delete',
+        onConfirm: function onConfirm() {
+          return _this2.deleteSubmit(delete_id);
+        }
+      });
+    },
+    //execute delete after confirming
+    deleteSubmit: function deleteSubmit(delete_id) {
+      var _this3 = this;
+
+      axios["delete"]('/rooms/' + delete_id).then(function (res) {
+        _this3.loadAsyncData();
+      })["catch"](function (err) {
+        if (err.response.status === 422) {
+          _this3.errors = err.response.data.errors;
+        }
+      });
+    },
+    //update code here
+    getData: function getData(data_id) {
+      var _this4 = this;
+
+      this.clearFields();
+      this.global_id = data_id;
+      this.isModalCreate = true;
+      axios.get('/rooms/' + data_id).then(function (res) {
+        _this4.fields = res.data;
+        _this4.fields.building = res.data.building.building_id;
+        _this4.fields.floor = res.data.floor.floor_id;
+      });
+    },
+    clearFields: function clearFields() {
+      this.fields = {
+        floor_name: null
+      };
+    },
+    submit: function submit() {
+      var _this5 = this;
+
+      if (this.global_id > 0) {
+        //update
+        axios.put('/rooms/' + this.global_id, this.fields).then(function (res) {
+          if (res.data.status === 'updated') {
+            _this5.$buefy.dialog.alert({
+              title: 'UPDATED!',
+              message: 'Successfully updated.',
+              type: 'is-success',
+              onConfirm: function onConfirm() {
+                _this5.loadAsyncData();
+
+                _this5.clearFields();
+
+                _this5.global_id = 0;
+                _this5.isModalCreate = false;
+              }
+            });
+          }
+        })["catch"](function (err) {
+          if (err.response.status === 422) {
+            _this5.errors = err.response.data.errors;
+          }
+        });
+      } else {
+        //INSERT HERE
+        axios.post('/rooms', this.fields).then(function (res) {
+          if (res.data.status === 'saved') {
+            _this5.$buefy.dialog.alert({
+              title: 'SAVED!',
+              message: 'Successfully saved.',
+              type: 'is-success',
+              confirmText: 'OK',
+              onConfirm: function onConfirm() {
+                _this5.isModalCreate = false;
+
+                _this5.loadAsyncData();
+
+                _this5.clearFields();
+
+                _this5.global_id = 0;
+              }
+            });
+          }
+        })["catch"](function (err) {
+          if (err.response.status === 422) {
+            _this5.errors = err.response.data.errors;
+          }
+        });
+      }
+    },
+    loadOpenBuildings: function loadOpenBuildings() {
+      var _this6 = this;
+
+      axios.get('/load-buildings').then(function (res) {
+        _this6.buildings = res.data;
+      });
+    },
+    loadOpenFloors: function loadOpenFloors() {
+      var _this7 = this;
+
+      axios.get('/load-floors').then(function (res) {
+        _this7.floors = res.data;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.loadAsyncData();
+    this.loadOpenBuildings();
+    this.loadOpenFloors();
   }
 });
 
@@ -11430,6 +11804,9 @@ Vue.filter('formatTime', function (value) {
   var ampm = H < 12 ? " AM" : " PM";
   timeString = h + timeString.substr(2, 3) + ampm;
   return timeString;
+});
+Vue.filter('truncate', function (value, length) {
+  return value.length > length ? value.substr(0, length) + '...' : value;
 });
 var app = new Vue({
   el: '#app'
@@ -32089,6 +32466,45 @@ component.options.__file = "resources/js/components/Administrator/NavbarComponen
 
 /***/ }),
 
+/***/ "./resources/js/components/Administrator/Room/Room.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/Administrator/Room/Room.vue ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Room_vue_vue_type_template_id_0a2c21b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Room.vue?vue&type=template&id=0a2c21b2&scoped=true& */ "./resources/js/components/Administrator/Room/Room.vue?vue&type=template&id=0a2c21b2&scoped=true&");
+/* harmony import */ var _Room_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Room.vue?vue&type=script&lang=js& */ "./resources/js/components/Administrator/Room/Room.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Room_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Room_vue_vue_type_template_id_0a2c21b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _Room_vue_vue_type_template_id_0a2c21b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "0a2c21b2",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Administrator/Room/Room.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/Administrator/Schedule/Schedule.vue":
 /*!*********************************************************************!*\
   !*** ./resources/js/components/Administrator/Schedule/Schedule.vue ***!
@@ -32706,6 +33122,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/Administrator/Room/Room.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/Administrator/Room/Room.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Room_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Room.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Room/Room.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Room_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************!*\
   !*** ./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=script&lang=js& ***!
@@ -33126,6 +33558,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NavbarComponent_vue_vue_type_template_id_5dc66390_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NavbarComponent_vue_vue_type_template_id_5dc66390_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./NavbarComponent.vue?vue&type=template&id=5dc66390&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/NavbarComponent.vue?vue&type=template&id=5dc66390&scoped=true&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Administrator/Room/Room.vue?vue&type=template&id=0a2c21b2&scoped=true&":
+/*!********************************************************************************************************!*\
+  !*** ./resources/js/components/Administrator/Room/Room.vue?vue&type=template&id=0a2c21b2&scoped=true& ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Room_vue_vue_type_template_id_0a2c21b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Room_vue_vue_type_template_id_0a2c21b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Room_vue_vue_type_template_id_0a2c21b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Room.vue?vue&type=template&id=0a2c21b2&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Room/Room.vue?vue&type=template&id=0a2c21b2&scoped=true&");
 
 
 /***/ }),
@@ -34145,7 +34594,7 @@ var render = function () {
                             return [
                               _vm._v(
                                 "\n                            " +
-                                  _vm._s(props.row.building.building_name) +
+                                  _vm._s(props.row.room.building_name) +
                                   "\n                        "
                               ),
                             ]
@@ -34163,7 +34612,25 @@ var render = function () {
                             return [
                               _vm._v(
                                 "\n                            " +
-                                  _vm._s(props.row.floor.floor_name) +
+                                  _vm._s(props.row.room.floor_name) +
+                                  "\n                        "
+                              ),
+                            ]
+                          },
+                        },
+                      ]),
+                    }),
+                    _vm._v(" "),
+                    _c("b-table-column", {
+                      attrs: { field: "room", label: "Room" },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "default",
+                          fn: function (props) {
+                            return [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(props.row.room.room) +
                                   "\n                        "
                               ),
                             ]
@@ -34220,7 +34687,12 @@ var render = function () {
                             return [
                               _vm._v(
                                 "\n                            " +
-                                  _vm._s(props.row.device_token_on) +
+                                  _vm._s(
+                                    _vm._f("truncate")(
+                                      props.row.device_token_on,
+                                      10
+                                    )
+                                  ) +
                                   "\n                        "
                               ),
                             ]
@@ -34241,7 +34713,12 @@ var render = function () {
                             return [
                               _vm._v(
                                 "\n                            " +
-                                  _vm._s(props.row.device_token_off) +
+                                  _vm._s(
+                                    _vm._f("truncate")(
+                                      props.row.device_token_off,
+                                      10
+                                    )
+                                  ) +
                                   "\n                        "
                               ),
                             ]
@@ -34408,11 +34885,11 @@ var render = function () {
                             "b-field",
                             {
                               attrs: {
-                                label: "Building",
+                                label: "Room",
                                 expanded: "",
-                                type: this.errors.building ? "is-danger" : "",
-                                message: this.errors.building
-                                  ? this.errors.building[0]
+                                type: this.errors.room ? "is-danger" : "",
+                                message: this.errors.room
+                                  ? this.errors.room[0]
                                   : "",
                               },
                             },
@@ -34422,70 +34899,25 @@ var render = function () {
                                 {
                                   attrs: {
                                     expanded: "",
-                                    placeholder: "Building",
+                                    placeholder: "Room",
                                     required: "",
                                   },
                                   model: {
-                                    value: _vm.fields.building,
+                                    value: _vm.fields.room,
                                     callback: function ($$v) {
-                                      _vm.$set(_vm.fields, "building", $$v)
+                                      _vm.$set(_vm.fields, "room", $$v)
                                     },
-                                    expression: "fields.building",
+                                    expression: "fields.room",
                                   },
                                 },
-                                _vm._l(_vm.buildings, function (item, index) {
+                                _vm._l(_vm.rooms, function (item, index) {
                                   return _c(
                                     "option",
                                     {
                                       key: index,
-                                      domProps: { value: item.building_id },
+                                      domProps: { value: item.room_id },
                                     },
-                                    [_vm._v(_vm._s(item.building_name))]
-                                  )
-                                }),
-                                0
-                              ),
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "b-field",
-                            {
-                              attrs: {
-                                label: "Floor",
-                                expanded: "",
-                                type: this.errors.floor ? "is-danger" : "",
-                                message: this.errors.floor
-                                  ? this.errors.floor[0]
-                                  : "",
-                              },
-                            },
-                            [
-                              _c(
-                                "b-select",
-                                {
-                                  attrs: {
-                                    expanded: "",
-                                    placeholder: "Floor",
-                                    required: "",
-                                  },
-                                  model: {
-                                    value: _vm.fields.floor,
-                                    callback: function ($$v) {
-                                      _vm.$set(_vm.fields, "floor", $$v)
-                                    },
-                                    expression: "fields.floor",
-                                  },
-                                },
-                                _vm._l(_vm.floors, function (item, index) {
-                                  return _c(
-                                    "option",
-                                    {
-                                      key: index,
-                                      domProps: { value: item.floor_id },
-                                    },
-                                    [_vm._v(_vm._s(item.floor_name))]
+                                    [_vm._v(_vm._s(item.room))]
                                   )
                                 }),
                                 0
@@ -35743,7 +36175,7 @@ var render = function () {
                         ? _c("b-menu-item", {
                             attrs: {
                               label: "Building",
-                              icon: "cellphone-link",
+                              icon: "domain",
                               tag: "a",
                               href: "/buildings",
                             },
@@ -35754,7 +36186,7 @@ var render = function () {
                         ? _c("b-menu-item", {
                             attrs: {
                               label: "Floor",
-                              icon: "cellphone-link",
+                              icon: "floor-plan",
                               tag: "a",
                               href: "/floors",
                             },
@@ -35764,8 +36196,19 @@ var render = function () {
                       _vm.user.role === "ADMINISTRATOR"
                         ? _c("b-menu-item", {
                             attrs: {
+                              label: "Room",
+                              icon: "google-classroom",
+                              tag: "a",
+                              href: "/rooms",
+                            },
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.user.role === "ADMINISTRATOR"
+                        ? _c("b-menu-item", {
+                            attrs: {
                               label: "Group Role",
-                              icon: "cellphone-link",
+                              icon: "account-group",
                               tag: "a",
                               href: "/group-roles",
                             },
@@ -35833,6 +36276,596 @@ var render = function () {
               ),
             ],
             1
+          ),
+        ]
+      ),
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Room/Room.vue?vue&type=template&id=0a2c21b2&scoped=true&":
+/*!***********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Room/Room.vue?vue&type=template&id=0a2c21b2&scoped=true& ***!
+  \***********************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "section" }, [
+        _c("div", { staticClass: "columns is-centered" }, [
+          _c("div", { staticClass: "columns" }, [
+            _c(
+              "div",
+              { staticClass: "box" },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass: "is-flex is-justify-content-center mb-2",
+                    staticStyle: { "font-size": "20px", "font-weight": "bold" },
+                  },
+                  [_vm._v("LIST OF ROOMS")]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "level" }, [
+                  _c(
+                    "div",
+                    { staticClass: "level-left" },
+                    [
+                      _c(
+                        "b-field",
+                        { attrs: { label: "Page" } },
+                        [
+                          _c(
+                            "b-select",
+                            {
+                              on: { input: _vm.setPerPage },
+                              model: {
+                                value: _vm.perPage,
+                                callback: function ($$v) {
+                                  _vm.perPage = $$v
+                                },
+                                expression: "perPage",
+                              },
+                            },
+                            [
+                              _c("option", { attrs: { value: "5" } }, [
+                                _vm._v("5 per page"),
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "10" } }, [
+                                _vm._v("10 per page"),
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "15" } }, [
+                                _vm._v("15 per page"),
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "20" } }, [
+                                _vm._v("20 per page"),
+                              ]),
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-select",
+                            {
+                              on: { input: _vm.loadAsyncData },
+                              model: {
+                                value: _vm.sortOrder,
+                                callback: function ($$v) {
+                                  _vm.sortOrder = $$v
+                                },
+                                expression: "sortOrder",
+                              },
+                            },
+                            [
+                              _c("option", { attrs: { value: "asc" } }, [
+                                _vm._v("ASC"),
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "desc" } }, [
+                                _vm._v("DESC"),
+                              ]),
+                            ]
+                          ),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "level-right" }, [
+                    _c(
+                      "div",
+                      { staticClass: "level-item" },
+                      [
+                        _c(
+                          "b-field",
+                          { attrs: { label: "Search" } },
+                          [
+                            _c("b-input", {
+                              attrs: {
+                                type: "text",
+                                placeholder: "Search Room",
+                              },
+                              nativeOn: {
+                                keyup: function ($event) {
+                                  if (
+                                    !$event.type.indexOf("key") &&
+                                    _vm._k(
+                                      $event.keyCode,
+                                      "enter",
+                                      13,
+                                      $event.key,
+                                      "Enter"
+                                    )
+                                  ) {
+                                    return null
+                                  }
+                                  return _vm.loadAsyncData.apply(
+                                    null,
+                                    arguments
+                                  )
+                                },
+                              },
+                              model: {
+                                value: _vm.search.room,
+                                callback: function ($$v) {
+                                  _vm.$set(_vm.search, "room", $$v)
+                                },
+                                expression: "search.room",
+                              },
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "p",
+                              { staticClass: "control" },
+                              [
+                                _c(
+                                  "b-tooltip",
+                                  {
+                                    attrs: {
+                                      label: "Search",
+                                      type: "is-success",
+                                    },
+                                  },
+                                  [
+                                    _c("b-button", {
+                                      attrs: {
+                                        type: "is-primary",
+                                        "icon-right": "account-filter",
+                                      },
+                                      on: { click: _vm.loadAsyncData },
+                                    }),
+                                  ],
+                                  1
+                                ),
+                              ],
+                              1
+                            ),
+                          ],
+                          1
+                        ),
+                      ],
+                      1
+                    ),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "b-table",
+                  {
+                    attrs: {
+                      data: _vm.data,
+                      loading: _vm.loading,
+                      paginated: "",
+                      "backend-pagination": "",
+                      total: _vm.total,
+                      "per-page": _vm.perPage,
+                      "aria-next-label": "Next page",
+                      "aria-previous-label": "Previous page",
+                      "aria-page-label": "Page",
+                      "aria-current-label": "Current page",
+                      "backend-sorting": "",
+                      "default-sort-direction": _vm.defaultSortDirection,
+                    },
+                    on: { "page-change": _vm.onPageChange, sort: _vm.onSort },
+                  },
+                  [
+                    _c("b-table-column", {
+                      attrs: { field: "floor_id", label: "ID" },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "default",
+                          fn: function (props) {
+                            return [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(props.row.floor_id) +
+                                  "\n                        "
+                              ),
+                            ]
+                          },
+                        },
+                      ]),
+                    }),
+                    _vm._v(" "),
+                    _c("b-table-column", {
+                      attrs: { field: "building", label: "Building Name" },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "default",
+                          fn: function (props) {
+                            return [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(props.row.building.building_name) +
+                                  "\n                        "
+                              ),
+                            ]
+                          },
+                        },
+                      ]),
+                    }),
+                    _vm._v(" "),
+                    _c("b-table-column", {
+                      attrs: { field: "floor_name", label: "Floor Name" },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "default",
+                          fn: function (props) {
+                            return [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(props.row.floor.floor_name) +
+                                  "\n                        "
+                              ),
+                            ]
+                          },
+                        },
+                      ]),
+                    }),
+                    _vm._v(" "),
+                    _c("b-table-column", {
+                      attrs: { field: "room", label: "Room" },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "default",
+                          fn: function (props) {
+                            return [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(props.row.room) +
+                                  "\n                        "
+                              ),
+                            ]
+                          },
+                        },
+                      ]),
+                    }),
+                    _vm._v(" "),
+                    _c("b-table-column", {
+                      attrs: { label: "Action" },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "default",
+                          fn: function (props) {
+                            return [
+                              _c(
+                                "div",
+                                { staticClass: "is-flex" },
+                                [
+                                  _c(
+                                    "b-tooltip",
+                                    {
+                                      attrs: {
+                                        label: "Edit",
+                                        type: "is-warning",
+                                      },
+                                    },
+                                    [
+                                      _c("b-button", {
+                                        staticClass:
+                                          "button is-small is-warning mr-1",
+                                        attrs: {
+                                          tag: "a",
+                                          "icon-right": "pencil",
+                                        },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.getData(
+                                              props.row.room_id
+                                            )
+                                          },
+                                        },
+                                      }),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-tooltip",
+                                    {
+                                      attrs: {
+                                        label: "Delete",
+                                        type: "is-danger",
+                                      },
+                                    },
+                                    [
+                                      _c("b-button", {
+                                        staticClass:
+                                          "button is-small is-danger mr-1",
+                                        attrs: { "icon-right": "delete" },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.confirmDelete(
+                                              props.row.room_id
+                                            )
+                                          },
+                                        },
+                                      }),
+                                    ],
+                                    1
+                                  ),
+                                ],
+                                1
+                              ),
+                            ]
+                          },
+                        },
+                      ]),
+                    }),
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "buttons mt-3" },
+                  [
+                    _c(
+                      "b-button",
+                      {
+                        staticClass: "is-success",
+                        attrs: { "icon-right": "account-arrow-up-outline" },
+                        on: { click: _vm.openModal },
+                      },
+                      [_vm._v("NEW")]
+                    ),
+                  ],
+                  1
+                ),
+              ],
+              1
+            ),
+          ]),
+        ]),
+      ]),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          attrs: {
+            "has-modal-card": "",
+            "trap-focus": "",
+            width: 640,
+            "aria-role": "dialog",
+            "aria-label": "Modal",
+            "aria-modal": "",
+            type: "is-link",
+          },
+          model: {
+            value: _vm.isModalCreate,
+            callback: function ($$v) {
+              _vm.isModalCreate = $$v
+            },
+            expression: "isModalCreate",
+          },
+        },
+        [
+          _c(
+            "form",
+            {
+              on: {
+                submit: function ($event) {
+                  $event.preventDefault()
+                  return _vm.submit.apply(null, arguments)
+                },
+              },
+            },
+            [
+              _c("div", { staticClass: "modal-card" }, [
+                _c("header", { staticClass: "modal-card-head" }, [
+                  _c("p", { staticClass: "modal-card-title" }, [
+                    _vm._v("Room Information"),
+                  ]),
+                  _vm._v(" "),
+                  _c("button", {
+                    staticClass: "delete",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function ($event) {
+                        _vm.isModalCreate = false
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("section", { staticClass: "modal-card-body" }, [
+                  _c("div", {}, [
+                    _c("div", { staticClass: "columns" }, [
+                      _c(
+                        "div",
+                        { staticClass: "column" },
+                        [
+                          _c(
+                            "b-field",
+                            {
+                              attrs: {
+                                label: "Building",
+                                expanded: "",
+                                type: this.errors.building ? "is-danger" : "",
+                                message: this.errors.building
+                                  ? this.errors.building[0]
+                                  : "",
+                              },
+                            },
+                            [
+                              _c(
+                                "b-select",
+                                {
+                                  attrs: {
+                                    placeholder: "Building",
+                                    required: "",
+                                    expanded: "",
+                                  },
+                                  model: {
+                                    value: _vm.fields.building,
+                                    callback: function ($$v) {
+                                      _vm.$set(_vm.fields, "building", $$v)
+                                    },
+                                    expression: "fields.building",
+                                  },
+                                },
+                                _vm._l(_vm.buildings, function (item, index) {
+                                  return _c(
+                                    "option",
+                                    {
+                                      key: index,
+                                      domProps: { value: item.building_id },
+                                    },
+                                    [_vm._v(_vm._s(item.building_name))]
+                                  )
+                                }),
+                                0
+                              ),
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-field",
+                            {
+                              attrs: {
+                                label: "Floor",
+                                expanded: "",
+                                type: this.errors.floor ? "is-danger" : "",
+                                message: this.errors.floor
+                                  ? this.errors.floor[0]
+                                  : "",
+                              },
+                            },
+                            [
+                              _c(
+                                "b-select",
+                                {
+                                  attrs: {
+                                    placeholder: "Building",
+                                    required: "",
+                                    expanded: "",
+                                  },
+                                  model: {
+                                    value: _vm.fields.floor,
+                                    callback: function ($$v) {
+                                      _vm.$set(_vm.fields, "floor", $$v)
+                                    },
+                                    expression: "fields.floor",
+                                  },
+                                },
+                                _vm._l(_vm.floors, function (item, index) {
+                                  return _c(
+                                    "option",
+                                    {
+                                      key: index,
+                                      domProps: { value: item.floor_id },
+                                    },
+                                    [_vm._v(_vm._s(item.floor_name))]
+                                  )
+                                }),
+                                0
+                              ),
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "b-field",
+                            {
+                              attrs: {
+                                label: "Room",
+                                type: this.errors.room ? "is-danger" : "",
+                                message: this.errors.room
+                                  ? this.errors.room[0]
+                                  : "",
+                              },
+                            },
+                            [
+                              _c("b-input", {
+                                attrs: { placeholder: "Room", required: "" },
+                                model: {
+                                  value: _vm.fields.room,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.fields, "room", $$v)
+                                  },
+                                  expression: "fields.room",
+                                },
+                              }),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                    ]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "footer",
+                  { staticClass: "modal-card-foot" },
+                  [
+                    _c("b-button", {
+                      attrs: { label: "Close" },
+                      on: {
+                        click: function ($event) {
+                          _vm.isModalCreate = false
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        class: _vm.btnClass,
+                        attrs: { label: "Save", type: "is-success" },
+                      },
+                      [_vm._v("SAVE")]
+                    ),
+                  ],
+                  1
+                ),
+              ]),
+            ]
           ),
         ]
       ),
@@ -62751,6 +63784,7 @@ var map = {
 	"./components/Administrator/Floor/Floor.vue": "./resources/js/components/Administrator/Floor/Floor.vue",
 	"./components/Administrator/GroupRole/GroupRole.vue": "./resources/js/components/Administrator/GroupRole/GroupRole.vue",
 	"./components/Administrator/NavbarComponent.vue": "./resources/js/components/Administrator/NavbarComponent.vue",
+	"./components/Administrator/Room/Room.vue": "./resources/js/components/Administrator/Room/Room.vue",
 	"./components/Administrator/Schedule/Schedule.vue": "./resources/js/components/Administrator/Schedule/Schedule.vue",
 	"./components/Administrator/Schedule/ScheduleCreateUpdate.vue": "./resources/js/components/Administrator/Schedule/ScheduleCreateUpdate.vue",
 	"./components/Administrator/Syslog/Syslog.vue": "./resources/js/components/Administrator/Syslog/Syslog.vue",
