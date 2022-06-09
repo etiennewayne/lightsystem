@@ -12,7 +12,7 @@ class Syslog extends Model
     protected $table = 'syslogs';
     protected $primaryKey = 'id';
 
-    protected $fillable = ['syslog', 'username'];
+    protected $fillable = ['syslog', 'username', 'action_type'];
 
 
 }

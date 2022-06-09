@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 
 use App\Models\DeviceAccess;
 use App\Models\GroupRole;
+use App\Models\Syslog;
 
+use Auth;
 
 
 class DeviceAccessController extends Controller
@@ -44,10 +46,18 @@ class DeviceAccessController extends Controller
             'group_role' => ['required']
         ]);
 
-        DeviceAccess::create([
+        $data = DeviceAccess::create([
             'device_id' => $req->device,
             'group_role_id' => $req->group_role
         ]);
+
+        $user = Auth::user();
+        Syslog::create([
+            'syslog' => 'Data ' .$data->device_access_id .' created.',
+            'username' => $user->username,
+            'action_type' => 'INSERT'
+        ]);
+
 
         return response()->json([
             'status' => 'saved'
@@ -66,6 +76,13 @@ class DeviceAccessController extends Controller
         $data->group_role_id = $req->group_role;
         $data->save();
 
+        $user = Auth::user();
+        Syslog::create([
+            'syslog' => 'Data ' .$id .' updated.',
+            'username' => $user->username,
+            'action_type' => 'UPDATE'
+        ]);
+
         return response()->json([
             'status' => 'updated'
         ], 200);
@@ -73,7 +90,18 @@ class DeviceAccessController extends Controller
 
     public function destroy($id){
 
+        $data = DeviceAccess::find($id);
+
         DeviceAccess::destroy($id);
+
+
+        $user = Auth::user();
+        Syslog::create([
+            'syslog' => 'Data ' .$data->device_access_id .' delete.',
+            'username' => $user->username,
+            'action_type' => 'DELETE'
+        ]);
+
 
         return response()->json([
             'status' => 'deleted'
