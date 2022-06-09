@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Building;
 use App\Models\Floor;
 use App\Models\Room;
+use App\Models\Device;
+
+use App\Models\GroupRole;
 
 
 
@@ -92,6 +95,14 @@ Route::get('/get-group-roles', [App\Http\Controllers\Administrator\GroupRoleCont
 Route::resource('/devices', App\Http\Controllers\Administrator\DeviceController::class);
 Route::get('/get-devices', [App\Http\Controllers\Administrator\DeviceController::class, 'getDevices']);
 
+
+//devices
+Route::resource('/device-accesses', App\Http\Controllers\Administrator\DeviceAccessController::class);
+Route::get('/get-device-accesses', [App\Http\Controllers\Administrator\DeviceAccessController::class, 'getDevicesAccesses']);
+
+
+
+//loading switch for buildings
 Route::get('/load-switch-buildings', [App\Http\Controllers\Administrator\DeviceOpenController::class, 'loadSwitchBuildings']);
 
 
@@ -131,6 +142,9 @@ Route::get('/get-my-profile', [App\Http\Controllers\User\MyProfileController::cl
 
 Route::get('/my-upcoming-appointment', [App\Http\Controllers\User\MyAppointmentController::class, 'upcomingAppointment']);
 
+
+
+
 Route::get('/load-buildings', function(){
     return Building::all();
 });
@@ -140,6 +154,13 @@ Route::get('/load-floors', function(){
 
 Route::get('/load-open-rooms', function(){
     return Room::orderBy('room', 'asc')->get();
+});
+
+Route::get('/load-open-devices', function(){
+    return Device::with('room')->orderBy('device_name', 'asc')->get();
+});
+Route::get('/load-open-group-roles', function(){
+    return GroupRole::orderBy('group_role_name', 'asc')->get();
 });
 
 
