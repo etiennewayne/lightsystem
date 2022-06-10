@@ -15,7 +15,10 @@ class Building extends Model
     protected $fillable = ['building_name'];
 
     public function devices(){
-        return $this->hasMany(Device::class, 'building_id', 'building_id');
+        return $this->hasMany(Room::class, 'building_id', 'building_id')
+            ->leftJoin('floors', 'floors.floor_id', 'rooms.floor_id')
+            ->leftJoin('devices', 'rooms.room_id', 'devices.room_id')
+            ->leftJoin('device_accesses', 'devices.device_id', 'device_accesses.device_id');
     }
 
 

@@ -65,26 +65,22 @@
                                     {{ props.row.device.device_name }}
                                 </b-table-column>
 
-                                <b-table-column field="device_ip" label="Device IP" v-slot="props">
-                                    {{ props.row.device.device_ip }}
-                                </b-table-column>
-
                                 <b-table-column field="schedule_name" label="Schedule Name" v-slot="props">
                                     {{ props.row.schedule_name }}
                                 </b-table-column>
 
-                                <b-table-column field="date_time" label="DateTime" v-slot="props">
-                                    {{ props.row.date_time }}
+                                <b-table-column field="schedule_on" label="Schedule On" v-slot="props">
+                                    {{ props.row.schedule_on | formatTime }}
                                 </b-table-column>
 
-                                <b-table-column field="system_action" label="System Action" v-slot="props">
+                                <b-table-column field="schedule_off" label="Schedule Off" v-slot="props">
+                                    {{ props.row.schedule_off | formatTime }}
+                                </b-table-column>
+
+                                <!-- <b-table-column field="system_action" label="System Action" v-slot="props">
                                     <span v-if="props.row.system_action === 'ON'" class="light-on">ON</span>
                                     <span v-else class="light-off">OFF</span>
-                                </b-table-column>
-
-                                <b-table-column field="action_type" label="Action Type" v-slot="props">
-                                    {{ props.row.action_type }}
-                                </b-table-column>
+                                </b-table-column> -->
 
                                 <b-table-column field="user_interact" label="User Interact" v-slot="props">
                                     {{ props.row.ntuser }}
@@ -240,8 +236,6 @@ export default {
             });
         },
 
-
-
         //update code here
         getData: function(data_id){
             this.clearFields();
@@ -251,10 +245,11 @@ export default {
 
             //nested axios for getting the address 1 by 1 or request by request
             axios.get('/schedules/' + data_id).then(res=>{
-                this.fields.training_center = res.data.training_center_id;
-                let dateNTime = res.data.app_date + ' ' + res.data.app_time;
-                this.fields.appointment_date = new Date(dateNTime);
-                this.fields.remarks = res.data.remarks;
+                // this.fields.training_center = res.data.training_center_id;
+                // let dateNTime = res.data.app_date + ' ' + res.data.app_time;
+                // this.fields.appointment_date = new Date(dateNTime);
+                // this.fields.remarks = res.data.remarks;
+                
 
             });
         },

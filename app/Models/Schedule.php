@@ -13,7 +13,10 @@ class Schedule extends Model
     protected $primaryKey = 'schedule_id';
 
     protected $fillable = ['device_id', 
-        'schedule_name', 'date_time', 'system_action', 'action_type', 'ntuser'];
+        'schedule_name', 'date_time', 'system_action', 'action_type',
+        'schedule_on', 'schedule_off',
+        'mon', 'tue', 'wed', 'thur', 'fri', 'sat', 'sun',
+        'ntuser'];
 
 
     public function device(){

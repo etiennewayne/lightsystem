@@ -25,6 +25,7 @@ class UserSeeder extends Seeder
                 'email' => 'archielin@light.com',
                 'contact_no' => '09164578599',
                 'role' => 'ADMINISTRATOR',
+                'group_role_id' => 1,
                 'password' => Hash::make('a')
             ],
 
@@ -38,6 +39,7 @@ class UserSeeder extends Seeder
                 'email' => 'prelyn@light.com',
                 'contact_no' => '09164578591',
                 'role' => 'ADMINISTRATOR',
+                'group_role_id' => 2,
                 'password' => Hash::make('a')
             ],
 
@@ -50,6 +52,7 @@ class UserSeeder extends Seeder
                 'email' => 'jean@light.com',
                 'contact_no' => '09164578592',
                 'role' => 'STAFF',
+                'group_role_id' => 2,
                 'password' => Hash::make('a')
             ],
             

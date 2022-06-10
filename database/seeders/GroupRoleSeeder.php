@@ -17,10 +17,13 @@ class GroupRoleSeeder extends Seeder
 
         $data = [
             [
-                'group_role_name' => 'IT',
+                'group_role_name' => 'ADMINISTRATOR',
             ],
             [
                 'group_role_name' => 'GUARD',
+            ],
+            [
+                'group_role_name' => 'IT',
             ],
     
             

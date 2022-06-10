@@ -39,7 +39,7 @@ class UserController extends Controller
     }
 
     public function show($id){
-        return User::find($id);
+        return User::with(['group_role'])->find($id);
     }
 
     public function store(Request $req){
@@ -54,6 +54,7 @@ class UserController extends Controller
             'email' => ['required', 'unique:users'],
             'password' => ['required', 'string', 'confirmed'],
             'role' => ['required', 'string'],
+            'group_role' => ['required'],
         ]);
 
         $data = User::create([
@@ -67,6 +68,7 @@ class UserController extends Controller
             'email' => $req->email,
             'contact_no' => $req->contact_no,
             'role' => $req->role,
+            'group_role_id' => $req->group_role,
         ]);
 
         $user = Auth::user();
@@ -89,8 +91,7 @@ class UserController extends Controller
             'sex' => ['required', 'string', 'max:20'],
             'email' => ['required', 'unique:users,email,'.$id.',user_id'],
             'role' => ['required', 'string'],
-         
-          
+            'group_role' => ['required'],
         ]);
 
         $data = User::find($id);
@@ -101,6 +102,7 @@ class UserController extends Controller
         $data->sex = $req->sex;
         $data->email = $req->email;
         $data->role = $req->role;
+        $data->group_role_id = $req->group_role;
      
         $data->save();
 

@@ -229,12 +229,25 @@
                                              :type="this.errors.role ? 'is-danger':''"
                                              :message="this.errors.role ? this.errors.role[0] : ''">
                                         <b-select v-model="fields.role" expanded>
-                                            <option value="ADMIN">ADMINISTRATOR</option>
+                                            <option value="ADMINISTRATOR">ADMINISTRATOR</option>
                                             <option value="STAFF">STAFF</option>
                                         </b-select>
                                     </b-field>
                                 </div>
 
+                            </div>
+
+                            <div class="columns">
+                                <div class="column">
+                                    <b-field label="Group Role" label-position="on-border" expanded
+                                             :type="this.errors.group_role ? 'is-danger':''"
+                                             :message="this.errors.group_role ? this.errors.group_role[0] : ''">
+                                        <b-select v-model="fields.group_role" expanded>
+                                            <option v-for="(item, index) in group_roles" :key="index" :value="item.group_role_id">{{ item.group_role_name }}</option>
+                                            
+                                        </b-select>
+                                    </b-field>
+                                </div>
                             </div>
 
                             
@@ -294,6 +307,8 @@ export default{
                 'button': true,
                 'is-loading':false,
             },
+
+            group_roles: [],
 
          
         }
@@ -451,18 +466,15 @@ export default{
             //nested axios for getting the address 1 by 1 or request by request
             axios.get('/users/'+data_id).then(res=>{
                 this.fields = res.data;
-                this.fields.office = res.data.office_id;
-                let tempData = res.data;
-                //load city first
-                axios.get('/load-cities?prov=' + this.fields.province).then(res=>{
-                    //load barangay
-                    this.cities = res.data;
-                    axios.get('/load-barangays?prov=' + this.fields.province + '&city_code='+this.fields.city).then(res=>{
-                        this.barangays = res.data;
-                        this.fields = tempData;
-                    });
-                });
+                this.fields.group_role = res.data.group_role.group_role_id;
             });
+        },
+
+
+        loadOpenGroupRoles(){
+            axios.get('/load-open-group-roles').then(res=>{
+                this.group_roles = res.data;
+            })
         },
 
      
@@ -473,6 +485,7 @@ export default{
     mounted() {
     
         this.loadAsyncData();
+        this.loadOpenGroupRoles();
        
     }
 }

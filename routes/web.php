@@ -71,6 +71,10 @@ Route::get('/init-user', function(){
 
 Route::resource('/cpanel', App\Http\Controllers\Administrator\CpanelController::class);
 
+//loading switch for buildings
+Route::get('/load-switch-buildings', [App\Http\Controllers\Administrator\DeviceOpenController::class, 'loadSwitchBuildings']);
+
+
 //buildings
 Route::resource('/buildings', App\Http\Controllers\Administrator\BuildingController::class);
 Route::get('/get-buildings', [App\Http\Controllers\Administrator\BuildingController::class, 'getBuildings']);
@@ -101,12 +105,6 @@ Route::resource('/device-accesses', App\Http\Controllers\Administrator\DeviceAcc
 Route::get('/get-device-accesses', [App\Http\Controllers\Administrator\DeviceAccessController::class, 'getDevicesAccesses']);
 
 
-
-//loading switch for buildings
-Route::get('/load-switch-buildings', [App\Http\Controllers\Administrator\DeviceOpenController::class, 'loadSwitchBuildings']);
-
-
-
 //Schedule
 Route::resource('/schedules', App\Http\Controllers\Administrator\ScheduleController::class);
 Route::get('/get-schedules', [App\Http\Controllers\Administrator\ScheduleController::class, 'getSchedules']);
@@ -128,21 +126,9 @@ Route::get('/get-syslogs', [App\Http\Controllers\Administrator\SyslogController:
 /*     ADMINSITRATOR          */
 
 
-//USER
-Route::resource('/dashboard-user', App\Http\Controllers\User\DashboardUserController::class);
-Route::get('/get-user', [App\Http\Controllers\User\DashboardUserController::class, 'getUser']);
 
-Route::resource('/my-appointment', App\Http\Controllers\User\MyAppointmentController::class);
-Route::get('/get-my-appointments', [App\Http\Controllers\User\MyAppointmentController::class, 'getMyAppointment']);
-Route::post('/cancel-my-appointment/{id}', [App\Http\Controllers\User\MyAppointmentController::class, 'cancelMyAppointment']);
-
-
-Route::resource('/my-profile', App\Http\Controllers\User\MyProfileController::class);
-Route::get('/get-my-profile', [App\Http\Controllers\User\MyProfileController::class, 'getProfile']);
-
-Route::get('/my-upcoming-appointment', [App\Http\Controllers\User\MyAppointmentController::class, 'upcomingAppointment']);
-
-
+//for logs purpose
+Route::get('/switch-log', [App\Http\Controllers\Administrator\SwitchLogController::class, 'store']);
 
 
 Route::get('/load-buildings', function(){
@@ -176,6 +162,31 @@ Route::get('/applogout', function(Request $req){
     $req->session()->invalidate();
     $req->session()->regenerateToken();
 
+
+});
+
+
+Route::get('/s', function(){
+    $day = date('D');
+    
+    $sched = DB::table('schedules as a')
+        ->join('devices as b', 'a.device_id', 'b.device_id')
+        ->where($day, 1)
+        ->get();
+    
+    return $sched;
+
+    $time = date('H:i') . ':00';
+
+    foreach($sched as $i){
+        if($time === $i->schedule_on){
+            return 'turn on';
+        }
+    
+        if($time === $i->schedule_off){
+            return 'turn off';
+        }
+    }
 
 });
 

@@ -21,7 +21,7 @@ class User extends Authenticatable
     protected $primaryKey = 'user_id';
     protected $fillable = [
         'username', 'lname', 'fname', 'mname', 'suffix', 'sex',
-        'email', 'contact_no', 'role', 
+        'email', 'contact_no', 'role', 'group_role_id',
         'password',
     ];
 
@@ -43,4 +43,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function group_role(){
+        return $this->hasOne(GroupRole::class, 'group_role_id', 'group_role_id');
+    }
 }

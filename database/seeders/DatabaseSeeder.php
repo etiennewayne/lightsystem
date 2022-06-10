@@ -17,13 +17,14 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call([
            
+            GroupRoleSeeder::class,
             UserSeeder::class,
             BuildingSeeder::class,
-            GroupRoleSeeder::class,
             FloorSeeder::class,
             RoomSeeder::class,
             DeviceSeeder::class,
             ScheduleSeeder::class,
+            DeviceAccessSeeder::class,
         ]);
     }
 }

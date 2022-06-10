@@ -21,6 +21,18 @@ class CreateSchedulesTable extends Migration
             $table->dateTime('date_time')->nullable();
             $table->string('system_action')->nullable();
             $table->string('action_type')->nullable();
+
+            $table->time('schedule_on')->nullable();
+            $table->time('schedule_off')->nullable();
+
+            $table->tinyInteger('mon')->default(0);
+            $table->tinyInteger('tue')->default(0);
+            $table->tinyInteger('wed')->default(0);
+            $table->tinyInteger('thur')->default(0);
+            $table->tinyInteger('fri')->default(0);
+            $table->tinyInteger('sat')->default(0);
+            $table->tinyInteger('sun')->default(0);
+
             $table->string('ntuser')->nullable();
             $table->timestamps();
         });

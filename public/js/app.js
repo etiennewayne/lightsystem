@@ -7963,30 +7963,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      fields: {},
-      error: {},
-      buildings: [],
-      esp: []
+      mark: 'OFF',
+      buildings: []
     };
   },
   methods: {
     switch1: function switch1() {
       axios__WEBPACK_IMPORTED_MODULE_0___default().post('/').then(function (res) {});
     },
-    invokeSwitch: function invokeSwitch(data, index) {
+    invokeSwitch: function invokeSwitch(evt, data) {
       var token = '';
 
-      if (this.esp[index] === true) {
+      if (evt) {
         token = data.device_token_on;
+        axios__WEBPACK_IMPORTED_MODULE_0___default().get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON');
+        this.mark = 'ON';
       } else {
         token = data.device_token_off;
+        axios__WEBPACK_IMPORTED_MODULE_0___default().get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF');
+        this.mark = 'OFF';
       }
 
       fetch("http://".concat(data.device_ip, "/").concat(token));
@@ -7996,7 +7995,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios__WEBPACK_IMPORTED_MODULE_0___default().get('/load-switch-buildings').then(function (res) {
         _this.buildings = res.data;
-        console.log(_this.buildings);
       });
     }
   },
@@ -10167,10 +10165,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -10283,24 +10277,21 @@ __webpack_require__.r(__webpack_exports__);
     },
     //update code here
     getData: function getData(data_id) {
-      var _this4 = this;
-
       this.clearFields();
       this.global_id = data_id;
       this.isModalCreate = true; //nested axios for getting the address 1 by 1 or request by request
 
-      axios.get('/schedules/' + data_id).then(function (res) {
-        _this4.fields.training_center = res.data.training_center_id;
-        var dateNTime = res.data.app_date + ' ' + res.data.app_time;
-        _this4.fields.appointment_date = new Date(dateNTime);
-        _this4.fields.remarks = res.data.remarks;
+      axios.get('/schedules/' + data_id).then(function (res) {// this.fields.training_center = res.data.training_center_id;
+        // let dateNTime = res.data.app_date + ' ' + res.data.app_time;
+        // this.fields.appointment_date = new Date(dateNTime);
+        // this.fields.remarks = res.data.remarks;
       });
     },
     loadTrainingCenter: function loadTrainingCenter() {
-      var _this5 = this;
+      var _this4 = this;
 
       axios.get('/get-open-training-centers').then(function (res) {
-        _this5.trainingCenters = res.data;
+        _this4.trainingCenters = res.data;
       });
     }
   },
@@ -10383,6 +10374,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['propId'],
   data: function data() {
@@ -10397,8 +10424,17 @@ __webpack_require__.r(__webpack_exports__);
       isModalCreate: false,
       fields: {
         schedule_name: null,
+        schedule_on: null,
+        schedule_off: null,
         date_from: null,
-        date_to: null
+        date_to: null,
+        mon: false,
+        tue: false,
+        wed: false,
+        thur: false,
+        fri: false,
+        sat: false,
+        sun: false
       },
       errors: {},
       btnClass: {
@@ -10413,7 +10449,7 @@ __webpack_require__.r(__webpack_exports__);
     loadDevices: function loadDevices() {
       var _this = this;
 
-      axios.get('/load-devices').then(function (res) {
+      axios.get('/load-open-devices').then(function (res) {
         _this.devices = res.data;
       });
     },
@@ -10421,7 +10457,14 @@ __webpack_require__.r(__webpack_exports__);
       this.fields = {
         schedule_name: null,
         date_from: null,
-        date_to: null
+        date_to: null,
+        mon: false,
+        tue: false,
+        wed: false,
+        thur: false,
+        fri: false,
+        sat: false,
+        sun: false
       };
       this.errors = {};
     },
@@ -10459,11 +10502,20 @@ __webpack_require__.r(__webpack_exports__);
       this.clearFields(); //nested axios for getting the address 1 by 1 or request by request
 
       axios.get('/schedules/' + this.global_id).then(function (res) {
-        _this4.fields.date_time = new Date(res.data.date_time);
+        //this.fields.date_time = new Date(res.data.date_time);
         _this4.fields.device = res.data.device_id;
-        _this4.fields.schedule_name = res.data.schedule_name;
-        _this4.fields.system_action = res.data.system_action;
-        _this4.fields.action_type = res.data.action_type;
+        _this4.fields.schedule_name = res.data.schedule_name; //this.fields.system_action = res.data.system_action;
+        //this.fields.action_type = res.data.action_type;
+
+        _this4.fields.schedule_on = new Date(new Date().toLocaleDateString() + " " + res.data.schedule_on);
+        _this4.fields.schedule_off = new Date(new Date().toLocaleDateString() + " " + res.data.schedule_off);
+        _this4.fields.mon = res.data.mon === 1 ? true : false;
+        _this4.fields.tue = res.data.tue === 1 ? true : false;
+        _this4.fields.wed = res.data.wed === 1 ? true : false;
+        _this4.fields.thur = res.data.thur === 1 ? true : false;
+        _this4.fields.fri = res.data.fri === 1 ? true : false;
+        _this4.fields.sat = res.data.sat === 1 ? true : false;
+        _this4.fields.sun = res.data.sun === 1 ? true : false;
       });
     },
     submit: function submit() {
@@ -11034,6 +11086,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -11067,7 +11132,8 @@ __webpack_require__.r(__webpack_exports__);
         'is-success': true,
         'button': true,
         'is-loading': false
-      }
+      },
+      group_roles: []
     };
   },
   methods: {
@@ -11226,22 +11292,20 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/users/' + data_id).then(function (res) {
         _this5.fields = res.data;
-        _this5.fields.office = res.data.office_id;
-        var tempData = res.data; //load city first
+        _this5.fields.group_role = res.data.group_role.group_role_id;
+      });
+    },
+    loadOpenGroupRoles: function loadOpenGroupRoles() {
+      var _this6 = this;
 
-        axios.get('/load-cities?prov=' + _this5.fields.province).then(function (res) {
-          //load barangay
-          _this5.cities = res.data;
-          axios.get('/load-barangays?prov=' + _this5.fields.province + '&city_code=' + _this5.fields.city).then(function (res) {
-            _this5.barangays = res.data;
-            _this5.fields = tempData;
-          });
-        });
+      axios.get('/load-open-group-roles').then(function (res) {
+        _this6.group_roles = res.data;
       });
     }
   },
   mounted: function mounted() {
     this.loadAsyncData();
+    this.loadOpenGroupRoles();
   }
 });
 
@@ -31548,7 +31612,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.box-head[data-v-88d09ee4]{\n\tfont-size: 1.5em;\n\tfont-weight: bold;\n\tmargin: 0 0 25px 0;\n}\n.box[data-v-88d09ee4]{\n\tpadding-bottom: 25px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.box-head[data-v-88d09ee4]{\n\tfont-size: 1.5em;\n\tfont-weight: bold;\n\tmargin: 0 0 25px 0;\n}\n.box[data-v-88d09ee4]{\n\tpadding-bottom: 25px;\n\tmargin: 15px;\n}\n.building-container[data-v-88d09ee4]{\n\tdisplay: flex;\n\tjustify-content: center;\n}\n.building[data-v-88d09ee4]{\n\twidth: 300px;\n}\n@media only screen and (max-width: 600px) {\n.building-container[data-v-88d09ee4]{\n\t\tflex-direction: column;\n\t\tjustify-content: center;\n\t\talign-items: center;\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -34763,75 +34827,73 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("section", { staticClass: "hero is-fullheight-with-navbar" }, [
-      _c("div", { staticClass: "hero-head" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "hero-body" }, [
-        _c(
-          "div",
-          { staticClass: "container has-text-centered" },
-          _vm._l(_vm.buildings, function (item, index) {
-            return _c(
-              "div",
-              { key: index, staticClass: "columns is-centered" },
-              [
-                _c("div", { staticClass: "column is-6" }, [
-                  _c(
-                    "div",
-                    { staticClass: "box" },
-                    [
-                      _c("div", { staticClass: "box-head" }, [
-                        _vm._v(
-                          "\n\t\t\t\t\t\t\t\t\t" +
-                            _vm._s(item.building_name) +
-                            "\n\t\t\t\t\t\t\t\t"
-                        ),
-                      ]),
-                      _vm._v(" "),
-                      _vm._l(item.devices, function (i, ix) {
-                        return _c(
-                          "b-field",
-                          { key: ix, attrs: { label: i.device_name } },
-                          [
-                            _c(
-                              "b-switch",
-                              {
-                                attrs: { value: false, type: "is-success" },
-                                on: {
-                                  input: function ($event) {
-                                    return _vm.invokeSwitch(i, ix)
+    _c("div", { staticClass: "section" }, [
+      _c(
+        "div",
+        { staticClass: "building-container" },
+        _vm._l(_vm.buildings, function (item, index) {
+          return _c("div", { key: index, staticClass: "building" }, [
+            item.devices.length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "box" },
+                  [
+                    _c("div", { staticClass: "box-head" }, [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t" +
+                          _vm._s(item.building_name) +
+                          "\n\t\t\t\t\t"
+                      ),
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(item.devices, function (i, ix) {
+                      return _c(
+                        "div",
+                        { key: ix },
+                        [
+                          _c("hr"),
+                          _vm._v(" "),
+                          _c("div", [_vm._v(_vm._s(i.floor_name))]),
+                          _vm._v(" "),
+                          _c(
+                            "b-field",
+                            { attrs: { label: i.device_name } },
+                            [
+                              _c(
+                                "b-switch",
+                                {
+                                  attrs: { value: false, type: "is-success" },
+                                  on: {
+                                    input: function ($event) {
+                                      return _vm.invokeSwitch($event, i)
+                                    },
                                   },
                                 },
-                                model: {
-                                  value: _vm.esp[ix],
-                                  callback: function ($$v) {
-                                    _vm.$set(_vm.esp, ix, $$v)
-                                  },
-                                  expression: "esp[ix]",
-                                },
-                              },
-                              [
-                                _vm._v(
-                                  "\n\t\t\t\t\t\t\t\t\t\t" +
-                                    _vm._s(i.device_ip) +
-                                    "\n\t\t\t\t\t\t\t\t\t"
-                                ),
-                              ]
-                            ),
-                          ],
-                          1
-                        )
-                      }),
-                    ],
-                    2
-                  ),
-                ]),
-              ]
-            )
-          }),
-          0
-        ),
-      ]),
+                                [
+                                  _vm._v(
+                                    "\n\t\t\t\t\t\t\t\t" +
+                                      _vm._s(i.room) +
+                                      "\n\t\t\t\t\t\t\t"
+                                  ),
+                                ]
+                              ),
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("div", [_vm._v(_vm._s(_vm.mark))]),
+                        ],
+                        1
+                      )
+                    }),
+                  ],
+                  2
+                )
+              : _vm._e(),
+          ])
+        }),
+        0
+      ),
     ]),
   ])
 }
@@ -38209,24 +38271,6 @@ var render = function () {
                   }),
                   _vm._v(" "),
                   _c("b-table-column", {
-                    attrs: { field: "device_ip", label: "Device IP" },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "default",
-                        fn: function (props) {
-                          return [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(props.row.device.device_ip) +
-                                "\n                            "
-                            ),
-                          ]
-                        },
-                      },
-                    ]),
-                  }),
-                  _vm._v(" "),
-                  _c("b-table-column", {
                     attrs: { field: "schedule_name", label: "Schedule Name" },
                     scopedSlots: _vm._u([
                       {
@@ -38245,7 +38289,7 @@ var render = function () {
                   }),
                   _vm._v(" "),
                   _c("b-table-column", {
-                    attrs: { field: "date_time", label: "DateTime" },
+                    attrs: { field: "schedule_on", label: "Schedule On" },
                     scopedSlots: _vm._u([
                       {
                         key: "default",
@@ -38253,7 +38297,9 @@ var render = function () {
                           return [
                             _vm._v(
                               "\n                                " +
-                                _vm._s(props.row.date_time) +
+                                _vm._s(
+                                  _vm._f("formatTime")(props.row.schedule_on)
+                                ) +
                                 "\n                            "
                             ),
                           ]
@@ -38263,27 +38309,7 @@ var render = function () {
                   }),
                   _vm._v(" "),
                   _c("b-table-column", {
-                    attrs: { field: "system_action", label: "System Action" },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "default",
-                        fn: function (props) {
-                          return [
-                            props.row.system_action === "ON"
-                              ? _c("span", { staticClass: "light-on" }, [
-                                  _vm._v("ON"),
-                                ])
-                              : _c("span", { staticClass: "light-off" }, [
-                                  _vm._v("OFF"),
-                                ]),
-                          ]
-                        },
-                      },
-                    ]),
-                  }),
-                  _vm._v(" "),
-                  _c("b-table-column", {
-                    attrs: { field: "action_type", label: "Action Type" },
+                    attrs: { field: "schedule_off", label: "Schedule Off" },
                     scopedSlots: _vm._u([
                       {
                         key: "default",
@@ -38291,7 +38317,9 @@ var render = function () {
                           return [
                             _vm._v(
                               "\n                                " +
-                                _vm._s(props.row.action_type) +
+                                _vm._s(
+                                  _vm._f("formatTime")(props.row.schedule_off)
+                                ) +
                                 "\n                            "
                             ),
                           ]
@@ -38489,13 +38517,7 @@ var render = function () {
                                 key: index,
                                 domProps: { value: item.device_id },
                               },
-                              [
-                                _vm._v(
-                                  _vm._s(item.device_name) +
-                                    " - " +
-                                    _vm._s(item.device_ip)
-                                ),
-                              ]
+                              [_vm._v(_vm._s(item.device_name) + " ")]
                             )
                           }),
                           0
@@ -38527,36 +38549,37 @@ var render = function () {
                       1
                     ),
                     _vm._v(" "),
+                    _c("hr"),
+                    _vm._v(" "),
                     _c(
                       "b-field",
                       {
                         staticClass: "is-centered",
                         attrs: {
-                          label: "Select Date Time",
+                          label: "Schedule On",
                           grouped: "",
                           expanded: "",
                           "label-position": "on-border",
-                          type: this.errors.date_time ? "is-danger" : "",
-                          message: this.errors.date_time
-                            ? this.errors.date_time[0]
+                          type: this.errors.schedule_on ? "is-danger" : "",
+                          message: this.errors.schedule_on
+                            ? this.errors.schedule_on[0]
                             : "",
                         },
                       },
                       [
-                        _c("b-datetimepicker", {
+                        _c("b-timepicker", {
                           attrs: {
                             expanded: "",
-                            placeholder: "Type or select a date...",
                             icon: "calendar-today",
                             locale: _vm.locale,
                             editable: "",
                           },
                           model: {
-                            value: _vm.fields.date_time,
+                            value: _vm.fields.schedule_on,
                             callback: function ($$v) {
-                              _vm.$set(_vm.fields, "date_time", $$v)
+                              _vm.$set(_vm.fields, "schedule_on", $$v)
                             },
-                            expression: "fields.date_time",
+                            expression: "fields.schedule_on",
                           },
                         }),
                       ],
@@ -38566,70 +38589,144 @@ var render = function () {
                     _c(
                       "b-field",
                       {
+                        staticClass: "is-centered",
                         attrs: {
-                          label: "System Action",
-                          "label-position": "on-border",
+                          label: "Schedule Off",
+                          grouped: "",
                           expanded: "",
+                          "label-position": "on-border",
+                          type: this.errors.schedule_off ? "is-danger" : "",
+                          message: this.errors.schedule_off
+                            ? this.errors.schedule_off[0]
+                            : "",
                         },
                       },
                       [
-                        _c(
-                          "b-select",
-                          {
-                            attrs: { expanded: "" },
-                            model: {
-                              value: _vm.fields.system_action,
-                              callback: function ($$v) {
-                                _vm.$set(_vm.fields, "system_action", $$v)
-                              },
-                              expression: "fields.system_action",
-                            },
+                        _c("b-timepicker", {
+                          attrs: {
+                            expanded: "",
+                            icon: "calendar-today",
+                            locale: _vm.locale,
+                            editable: "",
                           },
-                          [
-                            _c("option", { attrs: { value: "ON" } }, [
-                              _vm._v("ON"),
-                            ]),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "OFF" } }, [
-                              _vm._v("OFF"),
-                            ]),
-                          ]
-                        ),
+                          model: {
+                            value: _vm.fields.schedule_off,
+                            callback: function ($$v) {
+                              _vm.$set(_vm.fields, "schedule_off", $$v)
+                            },
+                            expression: "fields.schedule_off",
+                          },
+                        }),
                       ],
                       1
                     ),
                     _vm._v(" "),
                     _c(
-                      "b-field",
-                      {
-                        attrs: {
-                          label: "Action Type",
-                          "label-position": "on-border",
-                          expanded: "",
-                        },
-                      },
+                      "div",
                       [
                         _c(
-                          "b-select",
-                          {
-                            attrs: { expanded: "" },
-                            model: {
-                              value: _vm.fields.action_type,
-                              callback: function ($$v) {
-                                _vm.$set(_vm.fields, "action_type", $$v)
-                              },
-                              expression: "fields.action_type",
-                            },
-                          },
+                          "b-field",
+                          { attrs: { label: "Days" } },
                           [
-                            _c("option", { attrs: { value: "REPEAT" } }, [
-                              _vm._v("REPEAT"),
-                            ]),
+                            _c(
+                              "b-checkbox",
+                              {
+                                model: {
+                                  value: _vm.fields.mon,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.fields, "mon", $$v)
+                                  },
+                                  expression: "fields.mon",
+                                },
+                              },
+                              [_vm._v("Mon")]
+                            ),
                             _vm._v(" "),
-                            _c("option", { attrs: { value: "SPECIFIC" } }, [
-                              _vm._v("SPECIFIC"),
-                            ]),
-                          ]
+                            _c(
+                              "b-checkbox",
+                              {
+                                model: {
+                                  value: _vm.fields.tue,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.fields, "tue", $$v)
+                                  },
+                                  expression: "fields.tue",
+                                },
+                              },
+                              [_vm._v("Tue")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-checkbox",
+                              {
+                                model: {
+                                  value: _vm.fields.wed,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.fields, "wed", $$v)
+                                  },
+                                  expression: "fields.wed",
+                                },
+                              },
+                              [_vm._v("Wed")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-checkbox",
+                              {
+                                model: {
+                                  value: _vm.fields.thur,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.fields, "thur", $$v)
+                                  },
+                                  expression: "fields.thur",
+                                },
+                              },
+                              [_vm._v("Thur")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-checkbox",
+                              {
+                                model: {
+                                  value: _vm.fields.fri,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.fields, "fri", $$v)
+                                  },
+                                  expression: "fields.fri",
+                                },
+                              },
+                              [_vm._v("Fri")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-checkbox",
+                              {
+                                model: {
+                                  value: _vm.fields.sat,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.fields, "sat", $$v)
+                                  },
+                                  expression: "fields.sat",
+                                },
+                              },
+                              [_vm._v("Sat")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-checkbox",
+                              {
+                                model: {
+                                  value: _vm.fields.sun,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.fields, "sun", $$v)
+                                  },
+                                  expression: "fields.sun",
+                                },
+                              },
+                              [_vm._v("Sun")]
+                            ),
+                          ],
+                          1
                         ),
                       ],
                       1
@@ -39810,14 +39907,67 @@ var render = function () {
                                   },
                                 },
                                 [
-                                  _c("option", { attrs: { value: "ADMIN" } }, [
-                                    _vm._v("ADMINISTRATOR"),
-                                  ]),
+                                  _c(
+                                    "option",
+                                    { attrs: { value: "ADMINISTRATOR" } },
+                                    [_vm._v("ADMINISTRATOR")]
+                                  ),
                                   _vm._v(" "),
                                   _c("option", { attrs: { value: "STAFF" } }, [
                                     _vm._v("STAFF"),
                                   ]),
                                 ]
+                              ),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "columns" }, [
+                      _c(
+                        "div",
+                        { staticClass: "column" },
+                        [
+                          _c(
+                            "b-field",
+                            {
+                              attrs: {
+                                label: "Group Role",
+                                "label-position": "on-border",
+                                expanded: "",
+                                type: this.errors.group_role ? "is-danger" : "",
+                                message: this.errors.group_role
+                                  ? this.errors.group_role[0]
+                                  : "",
+                              },
+                            },
+                            [
+                              _c(
+                                "b-select",
+                                {
+                                  attrs: { expanded: "" },
+                                  model: {
+                                    value: _vm.fields.group_role,
+                                    callback: function ($$v) {
+                                      _vm.$set(_vm.fields, "group_role", $$v)
+                                    },
+                                    expression: "fields.group_role",
+                                  },
+                                },
+                                _vm._l(_vm.group_roles, function (item, index) {
+                                  return _c(
+                                    "option",
+                                    {
+                                      key: index,
+                                      domProps: { value: item.group_role_id },
+                                    },
+                                    [_vm._v(_vm._s(item.group_role_name))]
+                                  )
+                                }),
+                                0
                               ),
                             ],
                             1
