@@ -13,6 +13,11 @@ IPAddress gateway(192,168,0,1);
 IPAddress primaryDNS(8,8,8,8); //optional
 IPAddress secondaryDNS(8,8,4,4); //optional
 
+//only this IP can access this device
+IPAddress canconnect(192,168,254,10);
+
+
+
 WiFiServer server(80);
 
 
@@ -68,6 +73,12 @@ void loop() {
   while(!client.available())
   {
     delay(1);
+  }
+
+  if(client.remoteIP() != canconnect){
+    Serial.println("Connection denied.");
+    client.print("Connection denied");
+    return;
   }
 
   // Read the first line of the request
