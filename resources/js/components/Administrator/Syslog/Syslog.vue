@@ -65,6 +65,10 @@
                                     {{ props.row.syslog }}
                                 </b-table-column>
 
+                                <b-table-column field="action_type" label="Action Type" v-slot="props">
+                                    {{ props.row.action_type }}
+                                </b-table-column>
+
                                 <b-table-column field="username" label="Username" v-slot="props">
                                     {{ props.row.username }}
                                 </b-table-column>

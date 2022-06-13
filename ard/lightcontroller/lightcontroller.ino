@@ -4,16 +4,17 @@
 //#include <WiFiClient.h>
 
 
-const char* ssid="annateah";   //Put your wifi network name here
+const char* ssid="eshen_2";   //Put your wifi network name here
 const char* password = "11223344";   //Put your wifi password here
 
-IPAddress local_ip(192,168,0,83);
+IPAddress local_ip(192,168,254,21);
 IPAddress subnet(255,255,255,0);
-IPAddress gateway(192,168,0,1);
+IPAddress gateway(192,168,254,254);
 IPAddress primaryDNS(8,8,8,8); //optional
 IPAddress secondaryDNS(8,8,4,4); //optional
 
 //only this IP can access this device
+//unsai IP sa laptop or PC (central ui)
 IPAddress canconnect(192,168,254,10);
 
 
@@ -88,13 +89,13 @@ void loop() {
  
   // Match the request
   int value = LOW;
-  if (request.indexOf("/ON") != -1)  
+  if (request.indexOf("/8792f6af87224906dd1e3f93d955e175") != -1)  
   {
     //turn off relay
     digitalWrite(RELAY1,HIGH);
     value = HIGH;
   }
-  if (request.indexOf("/OFF") != -1)  
+  if (request.indexOf("/b694d23793bd683c2db4b8dd95ad7972") != -1)  
   {
     //turn on relay
     digitalWrite(RELAY1,LOW);

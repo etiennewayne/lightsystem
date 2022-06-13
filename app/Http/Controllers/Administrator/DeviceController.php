@@ -69,6 +69,7 @@ class DeviceController extends Controller
         $user = Auth::user();
         Syslog::create([
             'syslog' => 'Device ' .$data->device_id . '('. $data->device_name.') created.',
+            'action_type' => 'INSERT',
             'username' => $user->username
         ]);
 
@@ -98,6 +99,7 @@ class DeviceController extends Controller
         $user = Auth::user();
         Syslog::create([
             'syslog' => 'Device ' .$data->device_id . '('. $data->device_name.') updated.',
+            'action_type' => 'UPDATE',
             'username' => $user->username
         ]);
 
@@ -113,6 +115,7 @@ class DeviceController extends Controller
         $user = Auth::user();
         Syslog::create([
             'syslog' => 'Device ' .$data->device_id . '('. $data->device_name.') deleted.',
+            'action_type' => 'DELETE',
             'username' => $user->username
         ]);
 

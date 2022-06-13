@@ -10676,6 +10676,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -38978,6 +38982,24 @@ var render = function () {
                             _vm._v(
                               "\n                                " +
                                 _vm._s(props.row.syslog) +
+                                "\n                            "
+                            ),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
+                    attrs: { field: "action_type", label: "Action Type" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(props.row.action_type) +
                                 "\n                            "
                             ),
                           ]
