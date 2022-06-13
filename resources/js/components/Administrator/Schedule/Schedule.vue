@@ -69,18 +69,23 @@
                                     {{ props.row.schedule_name }}
                                 </b-table-column>
 
+                                <b-table-column field="date_time" label="Date and Time" v-slot="props">
+                                    <span v-if="props.row.date_time">{{ props.row.date_time.toLocaleString() }}</span>
+                                </b-table-column>
+
                                 <b-table-column field="schedule_on" label="Schedule On" v-slot="props">
-                                    {{ props.row.schedule_on | formatTime }}
+                                    <span v-if="props.row.schedule_on">{{ props.row.schedule_on | formatTime }}</span>
                                 </b-table-column>
 
                                 <b-table-column field="schedule_off" label="Schedule Off" v-slot="props">
-                                    {{ props.row.schedule_off | formatTime }}
+                                    <span v-if="props.row.schedule_off">{{ props.row.schedule_off | formatTime }}</span>
                                 </b-table-column>
 
-                                <!-- <b-table-column field="system_action" label="System Action" v-slot="props">
+                                <b-table-column field="system_action" label="System Action" v-slot="props">
                                     <span v-if="props.row.system_action === 'ON'" class="light-on">ON</span>
-                                    <span v-else class="light-off">OFF</span>
-                                </b-table-column> -->
+                                    <span v-else-if="props.row.system_action === 'OFF'" class="light-off">OFF</span>
+                                    <span v-else></span>
+                                </b-table-column>
 
                                 <b-table-column field="user_interact" label="User Interact" v-slot="props">
                                     {{ props.row.ntuser }}

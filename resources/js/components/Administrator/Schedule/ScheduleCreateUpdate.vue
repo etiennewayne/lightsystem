@@ -8,77 +8,92 @@
                         
                         <form @submit.prevent="submit">
                             <div class="">
-                                <b-field label="Device" label-position="on-border" expanded>
+                                <b-field label="Device" label-position="on-border" expanded
+                                    :type="this.errors.device ? 'is-danger':''"
+                                    :message="this.errors.device ? this.errors.device[0] : ''">
                                     <b-select v-model="fields.device" expanded>
                                         <option v-for="(item, index) in devices" :key="index" :value="item.device_id">{{ item.device_name }} </option>
                                     </b-select>
                                 </b-field>
 
-                                <b-field label="Schedule Name" label-position="on-border">
+                                <b-field label="Schedule Name" label-position="on-border"
+                                    :type="this.errors.schedule_name ? 'is-danger':''"
+                                    :message="this.errors.schedule_name ? this.errors.schedule_name[0] : ''">
                                     <b-input type="text" v-model="fields.schedule_name" placeholder="Schedule Name"></b-input>
                                 </b-field>
-    
-                                <!-- <b-field label="Select Date Time" grouped  expanded class="is-centered" label-position="on-border"
-                                        :type="this.errors.date_time ? 'is-danger':''"
-                                        :message="this.errors.date_time ? this.errors.date_time[0] : ''">
-                                    <b-datetimepicker expanded
-                                        v-model="fields.date_time"
-                                        placeholder="Type or select a date..."
-                                        icon="calendar-today"
-                                        :locale="locale"
-                                        editable>
-                                    </b-datetimepicker>
-                                </b-field>
-    
-                                <b-field label="System Action" label-position="on-border" expanded>
-                                    <b-select v-model="fields.system_action" expanded>
-                                        <option value="ON">ON</option>
-                                        <option value="OFF">OFF</option>
-                                    </b-select>
-                                </b-field>
 
-                                <b-field label="Action Type" label-position="on-border" expanded>
+                                <b-field label="Please select an option" label-position="on-border">
+                                        <b-select v-model="fields.optionday">
+                                            <option :value="0">SPECIFIC DATE</option>
+                                            <option :value="1">CUSTOM DAYS</option>
+                                        </b-select>
+                                </b-field>
+                                <div v-if="fields.optionday == 0">
+                                    <b-field label="Select Date Time" grouped  expanded class="is-centered" label-position="on-border"
+                                            :type="this.errors.date_time ? 'is-danger':''"
+                                            :message="this.errors.date_time ? this.errors.date_time[0] : ''">
+                                        <b-datetimepicker expanded
+                                            v-model="fields.date_time"
+                                            placeholder="Type or select a date..."
+                                            icon="calendar-today"
+                                            :locale="locale"
+                                            editable>
+                                        </b-datetimepicker>
+                                    </b-field>
+
+                                    <b-field label="System Action" label-position="on-border" expanded>
+                                        <b-select v-model="fields.system_action" expanded>
+                                            <option value="ON">ON</option>
+                                            <option value="OFF">OFF</option>
+                                        </b-select>
+                                    </b-field>
+                                </div>
+    
+                                
+
+                                <!-- <b-field label="Action Type" label-position="on-border" expanded>
                                     <b-select v-model="fields.action_type" expanded>
                                         <option value="REPEAT">REPEAT</option>
                                         <option value="SPECIFIC">SPECIFIC</option>
                                     </b-select>
                                 </b-field> -->
+                                <div v-if="fields.optionday == 1">
+                                    <hr>
 
-                                <hr>
-
-                                <b-field label="Schedule On" grouped  expanded class="is-centered" label-position="on-border"
-                                        :type="this.errors.schedule_on ? 'is-danger':''"
-                                        :message="this.errors.schedule_on ? this.errors.schedule_on[0] : ''">
-                                    <b-timepicker expanded
-                                        v-model="fields.schedule_on"
-                                        icon="calendar-today"
-                                        :locale="locale"
-                                        editable>
-                                    </b-timepicker>
-                                </b-field>
-
-                                <b-field label="Schedule Off" grouped  expanded class="is-centered" label-position="on-border"
-                                        :type="this.errors.schedule_off ? 'is-danger':''"
-                                        :message="this.errors.schedule_off ? this.errors.schedule_off[0] : ''">
-                                    <b-timepicker expanded
-                                        v-model="fields.schedule_off"
-                                        icon="calendar-today"
-                                        :locale="locale"
-                                        editable>
-                                    </b-timepicker>
-                                </b-field>
-
-                                <div>
-                                    <b-field label="Days">
-                                        <b-checkbox v-model="fields.mon">Mon</b-checkbox>
-                                        <b-checkbox v-model="fields.tue">Tue</b-checkbox>
-                                        <b-checkbox v-model="fields.wed">Wed</b-checkbox>
-                                        <b-checkbox v-model="fields.thur">Thur</b-checkbox>
-                                        <b-checkbox v-model="fields.fri">Fri</b-checkbox>
-                                        <b-checkbox v-model="fields.sat">Sat</b-checkbox>
-                                        <b-checkbox v-model="fields.sun">Sun</b-checkbox>
+                                    <b-field label="Schedule On" grouped  expanded class="is-centered" label-position="on-border"
+                                            :type="this.errors.schedule_on ? 'is-danger':''"
+                                            :message="this.errors.schedule_on ? this.errors.schedule_on[0] : ''">
+                                        <b-timepicker expanded
+                                            v-model="fields.schedule_on"
+                                            icon="calendar-today"
+                                            :locale="locale"
+                                            editable>
+                                        </b-timepicker>
                                     </b-field>
-                                </div>
+
+                                    <b-field label="Schedule Off" grouped  expanded class="is-centered" label-position="on-border"
+                                            :type="this.errors.schedule_off ? 'is-danger':''"
+                                            :message="this.errors.schedule_off ? this.errors.schedule_off[0] : ''">
+                                        <b-timepicker expanded
+                                            v-model="fields.schedule_off"
+                                            icon="calendar-today"
+                                            :locale="locale"
+                                            editable>
+                                        </b-timepicker>
+                                    </b-field>
+
+                                    <div>
+                                        <b-field label="Days">
+                                            <b-checkbox v-model="fields.mon">Mon</b-checkbox>
+                                            <b-checkbox v-model="fields.tue">Tue</b-checkbox>
+                                            <b-checkbox v-model="fields.wed">Wed</b-checkbox>
+                                            <b-checkbox v-model="fields.thur">Thur</b-checkbox>
+                                            <b-checkbox v-model="fields.fri">Fri</b-checkbox>
+                                            <b-checkbox v-model="fields.sat">Sat</b-checkbox>
+                                            <b-checkbox v-model="fields.sun">Sun</b-checkbox>
+                                        </b-field>
+                                    </div>
+                                </div><!--end v-if-->
     
                             </div>
 
@@ -114,7 +129,9 @@ export default {
 
             isModalCreate: false,
 
+
             fields: {
+                optionday: 0,
                 schedule_name: null,
                 schedule_on: null,
                 schedule_off: null,
@@ -194,7 +211,7 @@ export default {
             //nested axios for getting the address 1 by 1 or request by request
             axios.get('/schedules/' + this.global_id).then(res=>{
                 
-                //this.fields.date_time = new Date(res.data.date_time);
+                this.fields.date_time = new Date(res.data.date_time);
                 this.fields.device = res.data.device_id;
                 this.fields.schedule_name = res.data.schedule_name;
                 //this.fields.system_action = res.data.system_action;

@@ -191,46 +191,23 @@ Route::get('/s', function(){
 });
 
 Route::get('/test', function(){
+    
     $sched = DB::table('schedules as a')
-        ->join('devices as b', 'a.device_id', 'b.device_id')
-        ->whereTime('date_time', date("H:i"))
-        ->get();
-
+                ->join('devices as b', 'a.device_id', 'b.device_id')
+                ->where('date_time', date("Y-m-d H:i"))
+                ->get();
 
     foreach($sched as $i){
-        
-        if($i->action_type == 'SPECIFIC'){
-
-            if(date('Y-m-d H:i') == date('Y-m-d H:i', strtotime($i->date_time))){
-                //SPECIFIC DATE AND TIME SCHEDULE
-                if($i->system_action == 'ON'){
-                    Http::withHeaders([
-                        'Content-Type' => 'text/plain'
-                    ])->get('http://'.$i->device_ip . '/' . $i->device_token_on, []);
-                }else{
-                    Http::withHeaders([
-                        'Content-Type' => 'text/plain'
-                    ])->get('http://'.$i->device_ip . '/' . $i->device_token_off, []);
-                }
-            }
+        if($i->system_action == 'ON'){
+            Http::withHeaders([
+                'Content-Type' => 'text/plain'
+            ])->get('http://'.$i->device_ip . '/' . $i->device_token_on, []);
         }else{
-            //ELSE IF SET TO REPEAT (DAILY)
-            //check if ON action or OFF action
-            if($i->system_action == 'ON'){
-                Http::withHeaders([
-                    'Content-Type' => 'text/plain'
-                ])->get('http://'.$i->device_ip . '/' . $i->device_token_on, []);
-            }else{
-                Http::withHeaders([
-                    'Content-Type' => 'text/plain'
-                ])->get('http://'.$i->device_ip . '/' . $i->device_token_off, []);
-                
-            }
+            Http::withHeaders([
+                'Content-Type' => 'text/plain'
+            ])->get('http://'.$i->device_ip . '/' . $i->device_token_off, []); 
         }
-
-        
     }
 
-   
 });
 

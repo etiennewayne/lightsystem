@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Floor;
 
+
+use Auth;
+use App\Models\Syslog;
+
 class FloorController extends Controller
 {
     //
@@ -40,8 +44,15 @@ class FloorController extends Controller
             'floor_name' => ['required', 'unique:floors']
         ]);
 
-        Floor::create([
+        $data = Floor::create([
             'floor_name' => strtoupper($req->floor_name)
+        ]);
+
+        $user = Auth::user();
+        Syslog::create([
+            'syslog' => 'Floor ' .$data->floor_name . ' was inserted.',
+            'action_type' => 'INSERT',
+            'username' => $user->username
         ]);
 
         return response()->json([
@@ -59,14 +70,30 @@ class FloorController extends Controller
         $data->floor_name = strtoupper($req->floor_name);
         $data->save();
 
+        $user = Auth::user();
+        Syslog::create([
+            'syslog' => 'Floor ' .$data->floor_name . ' was updated.',
+            'action_type' => 'UPDATE',
+            'username' => $user->username
+        ]);
+
+
         return response()->json([
             'status' => 'updated'
         ], 200);
     }
 
     public function destroy($id){
+        $data = Floor::find($id);
 
         Floor::destroy($id);
+
+        $user = Auth::user();
+        Syslog::create([
+            'syslog' => 'Floor ' .$data->floor_name . ' was deleted.',
+            'action_type' => 'DELETE',
+            'username' => $user->username
+        ]);
 
         return response()->json([
             'status' => 'deleted'

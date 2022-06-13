@@ -10165,6 +10165,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -10410,6 +10415,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['propId'],
   data: function data() {
@@ -10423,6 +10443,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       isModalCreate: false,
       fields: {
+        optionday: 0,
         schedule_name: null,
         schedule_on: null,
         schedule_off: null,
@@ -10502,7 +10523,7 @@ __webpack_require__.r(__webpack_exports__);
       this.clearFields(); //nested axios for getting the address 1 by 1 or request by request
 
       axios.get('/schedules/' + this.global_id).then(function (res) {
-        //this.fields.date_time = new Date(res.data.date_time);
+        _this4.fields.date_time = new Date(res.data.date_time);
         _this4.fields.device = res.data.device_id;
         _this4.fields.schedule_name = res.data.schedule_name; //this.fields.system_action = res.data.system_action;
         //this.fields.action_type = res.data.action_type;
@@ -38293,19 +38314,43 @@ var render = function () {
                   }),
                   _vm._v(" "),
                   _c("b-table-column", {
+                    attrs: { field: "date_time", label: "Date and Time" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            props.row.date_time
+                              ? _c("span", [
+                                  _vm._v(
+                                    _vm._s(props.row.date_time.toLocaleString())
+                                  ),
+                                ])
+                              : _vm._e(),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
                     attrs: { field: "schedule_on", label: "Schedule On" },
                     scopedSlots: _vm._u([
                       {
                         key: "default",
                         fn: function (props) {
                           return [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(
-                                  _vm._f("formatTime")(props.row.schedule_on)
-                                ) +
-                                "\n                            "
-                            ),
+                            props.row.schedule_on
+                              ? _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("formatTime")(
+                                        props.row.schedule_on
+                                      )
+                                    )
+                                  ),
+                                ])
+                              : _vm._e(),
                           ]
                         },
                       },
@@ -38319,13 +38364,39 @@ var render = function () {
                         key: "default",
                         fn: function (props) {
                           return [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(
-                                  _vm._f("formatTime")(props.row.schedule_off)
-                                ) +
-                                "\n                            "
-                            ),
+                            props.row.schedule_off
+                              ? _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("formatTime")(
+                                        props.row.schedule_off
+                                      )
+                                    )
+                                  ),
+                                ])
+                              : _vm._e(),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
+                    attrs: { field: "system_action", label: "System Action" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            props.row.system_action === "ON"
+                              ? _c("span", { staticClass: "light-on" }, [
+                                  _vm._v("ON"),
+                                ])
+                              : props.row.system_action === "OFF"
+                              ? _c("span", { staticClass: "light-off" }, [
+                                  _vm._v("OFF"),
+                                ])
+                              : _c("span"),
                           ]
                         },
                       },
@@ -38499,6 +38570,10 @@ var render = function () {
                           label: "Device",
                           "label-position": "on-border",
                           expanded: "",
+                          type: this.errors.device ? "is-danger" : "",
+                          message: this.errors.device
+                            ? this.errors.device[0]
+                            : "",
                         },
                       },
                       [
@@ -38536,6 +38611,10 @@ var render = function () {
                         attrs: {
                           label: "Schedule Name",
                           "label-position": "on-border",
+                          type: this.errors.schedule_name ? "is-danger" : "",
+                          message: this.errors.schedule_name
+                            ? this.errors.schedule_name[0]
+                            : "",
                         },
                       },
                       [
@@ -38553,188 +38632,320 @@ var render = function () {
                       1
                     ),
                     _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
                     _c(
                       "b-field",
                       {
-                        staticClass: "is-centered",
                         attrs: {
-                          label: "Schedule On",
-                          grouped: "",
-                          expanded: "",
+                          label: "Please select an option",
                           "label-position": "on-border",
-                          type: this.errors.schedule_on ? "is-danger" : "",
-                          message: this.errors.schedule_on
-                            ? this.errors.schedule_on[0]
-                            : "",
                         },
                       },
-                      [
-                        _c("b-timepicker", {
-                          attrs: {
-                            expanded: "",
-                            icon: "calendar-today",
-                            locale: _vm.locale,
-                            editable: "",
-                          },
-                          model: {
-                            value: _vm.fields.schedule_on,
-                            callback: function ($$v) {
-                              _vm.$set(_vm.fields, "schedule_on", $$v)
-                            },
-                            expression: "fields.schedule_on",
-                          },
-                        }),
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "b-field",
-                      {
-                        staticClass: "is-centered",
-                        attrs: {
-                          label: "Schedule Off",
-                          grouped: "",
-                          expanded: "",
-                          "label-position": "on-border",
-                          type: this.errors.schedule_off ? "is-danger" : "",
-                          message: this.errors.schedule_off
-                            ? this.errors.schedule_off[0]
-                            : "",
-                        },
-                      },
-                      [
-                        _c("b-timepicker", {
-                          attrs: {
-                            expanded: "",
-                            icon: "calendar-today",
-                            locale: _vm.locale,
-                            editable: "",
-                          },
-                          model: {
-                            value: _vm.fields.schedule_off,
-                            callback: function ($$v) {
-                              _vm.$set(_vm.fields, "schedule_off", $$v)
-                            },
-                            expression: "fields.schedule_off",
-                          },
-                        }),
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
                       [
                         _c(
-                          "b-field",
-                          { attrs: { label: "Days" } },
+                          "b-select",
+                          {
+                            model: {
+                              value: _vm.fields.optionday,
+                              callback: function ($$v) {
+                                _vm.$set(_vm.fields, "optionday", $$v)
+                              },
+                              expression: "fields.optionday",
+                            },
+                          },
                           [
-                            _c(
-                              "b-checkbox",
-                              {
-                                model: {
-                                  value: _vm.fields.mon,
-                                  callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "mon", $$v)
-                                  },
-                                  expression: "fields.mon",
-                                },
-                              },
-                              [_vm._v("Mon")]
-                            ),
+                            _c("option", { domProps: { value: 0 } }, [
+                              _vm._v("SPECIFIC DATE"),
+                            ]),
                             _vm._v(" "),
-                            _c(
-                              "b-checkbox",
-                              {
-                                model: {
-                                  value: _vm.fields.tue,
-                                  callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "tue", $$v)
-                                  },
-                                  expression: "fields.tue",
-                                },
-                              },
-                              [_vm._v("Tue")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "b-checkbox",
-                              {
-                                model: {
-                                  value: _vm.fields.wed,
-                                  callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "wed", $$v)
-                                  },
-                                  expression: "fields.wed",
-                                },
-                              },
-                              [_vm._v("Wed")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "b-checkbox",
-                              {
-                                model: {
-                                  value: _vm.fields.thur,
-                                  callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "thur", $$v)
-                                  },
-                                  expression: "fields.thur",
-                                },
-                              },
-                              [_vm._v("Thur")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "b-checkbox",
-                              {
-                                model: {
-                                  value: _vm.fields.fri,
-                                  callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "fri", $$v)
-                                  },
-                                  expression: "fields.fri",
-                                },
-                              },
-                              [_vm._v("Fri")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "b-checkbox",
-                              {
-                                model: {
-                                  value: _vm.fields.sat,
-                                  callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "sat", $$v)
-                                  },
-                                  expression: "fields.sat",
-                                },
-                              },
-                              [_vm._v("Sat")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "b-checkbox",
-                              {
-                                model: {
-                                  value: _vm.fields.sun,
-                                  callback: function ($$v) {
-                                    _vm.$set(_vm.fields, "sun", $$v)
-                                  },
-                                  expression: "fields.sun",
-                                },
-                              },
-                              [_vm._v("Sun")]
-                            ),
-                          ],
-                          1
+                            _c("option", { domProps: { value: 1 } }, [
+                              _vm._v("CUSTOM DAYS"),
+                            ]),
+                          ]
                         ),
                       ],
                       1
                     ),
+                    _vm._v(" "),
+                    _vm.fields.optionday == 0
+                      ? _c(
+                          "div",
+                          [
+                            _c(
+                              "b-field",
+                              {
+                                staticClass: "is-centered",
+                                attrs: {
+                                  label: "Select Date Time",
+                                  grouped: "",
+                                  expanded: "",
+                                  "label-position": "on-border",
+                                  type: this.errors.date_time
+                                    ? "is-danger"
+                                    : "",
+                                  message: this.errors.date_time
+                                    ? this.errors.date_time[0]
+                                    : "",
+                                },
+                              },
+                              [
+                                _c("b-datetimepicker", {
+                                  attrs: {
+                                    expanded: "",
+                                    placeholder: "Type or select a date...",
+                                    icon: "calendar-today",
+                                    locale: _vm.locale,
+                                    editable: "",
+                                  },
+                                  model: {
+                                    value: _vm.fields.date_time,
+                                    callback: function ($$v) {
+                                      _vm.$set(_vm.fields, "date_time", $$v)
+                                    },
+                                    expression: "fields.date_time",
+                                  },
+                                }),
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-field",
+                              {
+                                attrs: {
+                                  label: "System Action",
+                                  "label-position": "on-border",
+                                  expanded: "",
+                                },
+                              },
+                              [
+                                _c(
+                                  "b-select",
+                                  {
+                                    attrs: { expanded: "" },
+                                    model: {
+                                      value: _vm.fields.system_action,
+                                      callback: function ($$v) {
+                                        _vm.$set(
+                                          _vm.fields,
+                                          "system_action",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "fields.system_action",
+                                    },
+                                  },
+                                  [
+                                    _c("option", { attrs: { value: "ON" } }, [
+                                      _vm._v("ON"),
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "OFF" } }, [
+                                      _vm._v("OFF"),
+                                    ]),
+                                  ]
+                                ),
+                              ],
+                              1
+                            ),
+                          ],
+                          1
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.fields.optionday == 1
+                      ? _c(
+                          "div",
+                          [
+                            _c("hr"),
+                            _vm._v(" "),
+                            _c(
+                              "b-field",
+                              {
+                                staticClass: "is-centered",
+                                attrs: {
+                                  label: "Schedule On",
+                                  grouped: "",
+                                  expanded: "",
+                                  "label-position": "on-border",
+                                  type: this.errors.schedule_on
+                                    ? "is-danger"
+                                    : "",
+                                  message: this.errors.schedule_on
+                                    ? this.errors.schedule_on[0]
+                                    : "",
+                                },
+                              },
+                              [
+                                _c("b-timepicker", {
+                                  attrs: {
+                                    expanded: "",
+                                    icon: "calendar-today",
+                                    locale: _vm.locale,
+                                    editable: "",
+                                  },
+                                  model: {
+                                    value: _vm.fields.schedule_on,
+                                    callback: function ($$v) {
+                                      _vm.$set(_vm.fields, "schedule_on", $$v)
+                                    },
+                                    expression: "fields.schedule_on",
+                                  },
+                                }),
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-field",
+                              {
+                                staticClass: "is-centered",
+                                attrs: {
+                                  label: "Schedule Off",
+                                  grouped: "",
+                                  expanded: "",
+                                  "label-position": "on-border",
+                                  type: this.errors.schedule_off
+                                    ? "is-danger"
+                                    : "",
+                                  message: this.errors.schedule_off
+                                    ? this.errors.schedule_off[0]
+                                    : "",
+                                },
+                              },
+                              [
+                                _c("b-timepicker", {
+                                  attrs: {
+                                    expanded: "",
+                                    icon: "calendar-today",
+                                    locale: _vm.locale,
+                                    editable: "",
+                                  },
+                                  model: {
+                                    value: _vm.fields.schedule_off,
+                                    callback: function ($$v) {
+                                      _vm.$set(_vm.fields, "schedule_off", $$v)
+                                    },
+                                    expression: "fields.schedule_off",
+                                  },
+                                }),
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              [
+                                _c(
+                                  "b-field",
+                                  { attrs: { label: "Days" } },
+                                  [
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.mon,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "mon", $$v)
+                                          },
+                                          expression: "fields.mon",
+                                        },
+                                      },
+                                      [_vm._v("Mon")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.tue,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "tue", $$v)
+                                          },
+                                          expression: "fields.tue",
+                                        },
+                                      },
+                                      [_vm._v("Tue")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.wed,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "wed", $$v)
+                                          },
+                                          expression: "fields.wed",
+                                        },
+                                      },
+                                      [_vm._v("Wed")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.thur,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "thur", $$v)
+                                          },
+                                          expression: "fields.thur",
+                                        },
+                                      },
+                                      [_vm._v("Thur")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.fri,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "fri", $$v)
+                                          },
+                                          expression: "fields.fri",
+                                        },
+                                      },
+                                      [_vm._v("Fri")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.sat,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "sat", $$v)
+                                          },
+                                          expression: "fields.sat",
+                                        },
+                                      },
+                                      [_vm._v("Sat")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.sun,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "sun", $$v)
+                                          },
+                                          expression: "fields.sun",
+                                        },
+                                      },
+                                      [_vm._v("Sun")]
+                                    ),
+                                  ],
+                                  1
+                                ),
+                              ],
+                              1
+                            ),
+                          ],
+                          1
+                        )
+                      : _vm._e(),
                   ],
                   1
                 ),

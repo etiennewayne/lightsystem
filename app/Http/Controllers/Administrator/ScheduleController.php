@@ -51,32 +51,47 @@ class ScheduleController extends Controller
 
     public function store(Request $req){
         //return $req;
-        $req->validate([
-            'device' => ['required'],
-            'schedule_name' => ['required'],
-            // 'date_time' => ['required'],
-            // 'system_action' => ['required'],
-            // 'action_type' => ['required'],
-            'schedule_on' => ['required'],
-            'schedule_off' => ['required'],
-        ]);
 
-        //$dateTime =  $req->date_time;
-        //$nDateTime = date("Y-m-d H:i:s", strtotime($dateTime)); //convert to date format UNIX
-
-        $scheduleOn = date("H:i:s", strtotime($req->schedule_on)); //convert to date format UNIX
-        $scheduleOff = date("H:i:s", strtotime($req->schedule_off)); //convert to date format UNIX
-
+        if($req->optionday == 0){
+            $req->validate([
+                'device' => ['required'],
+                'schedule_name' => ['required'],
+                 'date_time' => ['required'],
+                // 'system_action' => ['required'],
+                // 'action_type' => ['required'],
+                //'schedule_on' => ['required'],
+                //'schedule_off' => ['required'],
+            ]);
+        }else{
+            $req->validate([
+                'device' => ['required'],
+                'schedule_name' => ['required'],
+                //'date_time' => ['required'],
+                // 'system_action' => ['required'],
+                // 'action_type' => ['required'],
+                'schedule_on' => ['required'],
+                'schedule_off' => ['required'],
+            ]);
+        }
+        
+        if($req->optionday == 0){
+            $dateTime =  $req->date_time;
+            $nDateTime = date("Y-m-d H:i:s", strtotime($dateTime)); //convert to date format UNIX
+        }else{
+            $scheduleOn = date("H:i:s", strtotime($req->schedule_on)); //convert to date format UNIX
+            $scheduleOff = date("H:i:s", strtotime($req->schedule_off)); //convert to date format UNIX
+        }
+        
         $user = Auth::user();
 
         $data = Schedule::create([
             'device_id' => $req->device,
             'schedule_name' => strtoupper($req->schedule_name),
-            // 'date_time' => $nDateTime,
-            // 'system_action' => $req->system_action,
+            'date_time' => $req->optionday == 0 ? $nDateTime : null,
+            'system_action' => $req->optionday == 0 ? $req->system_action : null,
             // 'action_type' => $req->action_type,
-            'schedule_on' => $scheduleOn,
-            'schedule_off' => $scheduleOff,
+            'schedule_on' => $req->optionday == 1 ? $scheduleOn : null,
+            'schedule_off' => $req->optionday == 1 ? $scheduleOff : null,
             'mon' => $req->mon,
             'tue' => $req->tue,
             'wed' => $req->wed,
@@ -105,31 +120,45 @@ class ScheduleController extends Controller
     }
     public function update(Request $req, $id){
 
-        $req->validate([
-            'device' => ['required'],
-            'schedule_name' => ['required'],
-            // 'date_time' => ['required'],
-            // 'system_action' => ['required'],
-            // 'action_type' => ['required'],
-            'schedule_on' => ['required'],
-            'schedule_off' => ['required'],
-        ]);
+        if($req->optionday == 0){
+            $req->validate([
+                'device' => ['required'],
+                'schedule_name' => ['required'],
+                 'date_time' => ['required'],
+                // 'system_action' => ['required'],
+                // 'action_type' => ['required'],
+                //'schedule_on' => ['required'],
+                //'schedule_off' => ['required'],
+            ]);
+        }else{
+            $req->validate([
+                'device' => ['required'],
+                'schedule_name' => ['required'],
+                //'date_time' => ['required'],
+                // 'system_action' => ['required'],
+                // 'action_type' => ['required'],
+                'schedule_on' => ['required'],
+                'schedule_off' => ['required'],
+            ]);
+        }
 
-        //$dateTime =  $req->date_time;
-        //$nDateTime = date("Y-m-d H:i:s", strtotime($dateTime)); //convert to date format UNIX
-        $scheduleOn = date("H:i:s", strtotime($req->schedule_on)); //convert to date format UNIX
-        $scheduleOff = date("H:i:s", strtotime($req->schedule_off)); //convert to date format UNIX
-
+        if($req->optionday == 0){
+            $dateTime =  $req->date_time;
+            $nDateTime = date("Y-m-d H:i:s", strtotime($dateTime)); //convert to date format UNIX
+        }else{
+            $scheduleOn = date("H:i:s", strtotime($req->schedule_on)); //convert to date format UNIX
+            $scheduleOff = date("H:i:s", strtotime($req->schedule_off)); //convert to date format UNIX
+        }
         $user = Auth::user();
 
         $data = Schedule::find($id);
         $data->device_id  = $req->device;
         $data->schedule_name  = $req->schedule_name;
-        // $data->date_time = $nDateTime;
-        // $data->system_action = $req->system_action;
+        $data->date_time = $req->optionday == 0 ? $nDateTime : null;
+        $data->system_action = $req->optionday == 0 ? $req->system_action : null;
         // $data->action_type = $req->action_type;
-        $data->schedule_on = $scheduleOn;
-        $data->schedule_off = $scheduleOff;
+        $data->schedule_on = $req->optionday == 1 ? $scheduleOn : null;
+        $data->schedule_off = $req->optionday == 1 ? $scheduleOff : null;
 
         $data->mon = $req->mon;
         $data->tue = $req->tue;
