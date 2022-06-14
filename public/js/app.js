@@ -8004,7 +8004,7 @@ __webpack_require__.r(__webpack_exports__);
       console.log('fire every 30sec');
     },
     test: function test() {
-      var checkboxes = document.querySelectorAll('switch');
+      var checkboxes = document.getElementById('switch[0][1]');
       console.log(checkboxes);
     }
   },
@@ -34905,7 +34905,12 @@ var render = function () {
                                 {
                                   attrs: {
                                     value: false,
-                                    id: i.room_id,
+                                    id:
+                                      "switch[" +
+                                      index +
+                                      "][" +
+                                      i.room_id +
+                                      "]",
                                     type: "is-success",
                                   },
                                   on: {
