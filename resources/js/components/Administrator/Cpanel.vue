@@ -57,27 +57,25 @@ export default {
 
 			let token = '';
 
-			console.log(data.room_id);
+			// console.log(data.room_id);
 		
-			var swQ = document.querySelector("switch").querySelectorAll('checkbox');
+			// var swQ = document.querySelector("switch").querySelectorAll('checkbox');
 
-			var sw = document.getElementById(data.room_id);
+			// var sw = document.getElementById(data.room_id);
 
-
-
-			console.log(sw);
-			console.log(swQ);
+			// console.log(sw);
+			// console.log(swQ);
 			
 			if(evt){
 				token = data.device_token_on;
-				//axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
+				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
 			}else{
 				token = data.device_token_off;
-				//axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
+				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
 			}
 
-			//fetch(`http://${data.device_ip}/${token}`);
-			axios.get('/test-switch')
+			fetch(`http://${data.device_ip}/${token}`);
+			//axios.get('/test-switch')
 			
 		},
 
