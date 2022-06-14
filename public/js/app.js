@@ -7963,13 +7963,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       mark: 'OFF',
-      buildings: [],
-      s: false
+      buildings: []
     };
   },
   methods: {
@@ -7978,16 +7978,20 @@ __webpack_require__.r(__webpack_exports__);
     },
     invokeSwitch: function invokeSwitch(evt, data, index, ix) {
       var token = '';
+      console.log(data.room_id);
+      var swQ = document.querySelector("switch").querySelectorAll('checkbox');
+      var sw = document.getElementById(data.room_id);
+      console.log(sw);
+      console.log(swQ);
 
       if (evt) {
-        token = data.device_token_on;
-        axios__WEBPACK_IMPORTED_MODULE_0___default().get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON');
+        token = data.device_token_on; //axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
       } else {
-        token = data.device_token_off;
-        axios__WEBPACK_IMPORTED_MODULE_0___default().get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF');
-      }
+        token = data.device_token_off; //axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
+      } //fetch(`http://${data.device_ip}/${token}`);
 
-      fetch("http://".concat(data.device_ip, "/").concat(token));
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get('/test-switch');
     },
     initData: function initData() {
       var _this = this;
@@ -34886,7 +34890,11 @@ var render = function () {
                               _c(
                                 "b-switch",
                                 {
-                                  attrs: { value: false, type: "is-success" },
+                                  attrs: {
+                                    value: false,
+                                    id: i.room_id,
+                                    type: "is-success",
+                                  },
                                   on: {
                                     input: function ($event) {
                                       return _vm.invokeSwitch(
@@ -34917,7 +34925,9 @@ var render = function () {
                             1
                           ),
                           _vm._v(" "),
-                          _c("div", [_vm._v(_vm._s(i.s))]),
+                          i.s
+                            ? _c("div", [_vm._v("ON")])
+                            : _c("div", [_vm._v("OFF")]),
                         ],
                         1
                       )

@@ -211,3 +211,6 @@ Route::get('/test', function(){
 
 });
 
+Route::get('/test-switch', function(){
+    return 'ON';
+});

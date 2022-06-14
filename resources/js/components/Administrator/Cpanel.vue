@@ -14,11 +14,12 @@
 							<hr>
 							<div>{{ i.floor_name }}</div>
 							<b-field :label="i.device_name">
-								<b-switch :value="false" @input="invokeSwitch($event, i, index, ix)" v-model="i.s" type="is-success">
+								<b-switch :value="false" @input="invokeSwitch($event, i, index, ix)" :id="i.room_id" v-model="i.s" type="is-success">
 									{{ i.room }}
 								</b-switch>
 							</b-field>
-							<div>{{ i.s }}</div>
+							<div v-if="i.s">ON</div>
+							<div v-else>OFF</div>
 						</div>
 					</div>
 				</div>
@@ -42,7 +43,7 @@ export default {
 			mark: 'OFF',
 			buildings: [],
 
-			s: false,
+		
 		}
 		
 	},
@@ -51,26 +52,38 @@ export default {
 			axios.post('/').then(res=>{
 			})
 		},
-
+	
 		invokeSwitch(evt, data, index, ix){
 
-			 let token = '';
+			let token = '';
+
+			console.log(data.room_id);
 		
+			var swQ = document.querySelector("switch").querySelectorAll('checkbox');
+
+			var sw = document.getElementById(data.room_id);
+
+
+
+			console.log(sw);
+			console.log(swQ);
+			
 			if(evt){
 				token = data.device_token_on;
-				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
+				//axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
 			}else{
 				token = data.device_token_off;
-				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
+				//axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
 			}
-			fetch(`http://${data.device_ip}/${token}`);
+
+			//fetch(`http://${data.device_ip}/${token}`);
+			axios.get('/test-switch')
 			
 		},
 
 		initData(){
 			axios.get('/load-switch-buildings').then(res=>{
 				this.buildings = res.data;
-				
 			})
 		}
 	},
