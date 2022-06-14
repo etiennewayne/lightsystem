@@ -7977,12 +7977,11 @@ __webpack_require__.r(__webpack_exports__);
       axios__WEBPACK_IMPORTED_MODULE_0___default().post('/').then(function (res) {});
     },
     invokeSwitch: function invokeSwitch(evt, data, index, ix) {
-      var token = '';
-      console.log(data.room_id);
-      var swQ = document.querySelector("switch").querySelectorAll('checkbox');
-      var sw = document.getElementById(data.room_id);
-      console.log(sw);
-      console.log(swQ);
+      var token = ''; // console.log(data.room_id);
+      // var swQ = document.querySelector("switch").querySelectorAll('checkbox');
+      // var sw = document.getElementById(data.room_id);
+      // console.log(sw);
+      // console.log(swQ);
 
       if (evt) {
         token = data.device_token_on; //axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
@@ -7999,10 +7998,24 @@ __webpack_require__.r(__webpack_exports__);
       axios__WEBPACK_IMPORTED_MODULE_0___default().get('/load-switch-buildings').then(function (res) {
         _this.buildings = res.data;
       });
+    },
+    getNotifications: function getNotifications() {
+      //dere ang codes
+      console.log('fire every 30sec');
+    },
+    test: function test() {
+      var checkboxes = document.querySelectorAll('switch');
+      console.log(checkboxes);
     }
   },
   mounted: function mounted() {
+    var _this2 = this;
+
     this.initData();
+    window.setInterval(function () {
+      _this2.getNotifications();
+    }, 30000);
+    this.test();
   }
 });
 

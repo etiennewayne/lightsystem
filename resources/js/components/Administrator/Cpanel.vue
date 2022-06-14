@@ -43,7 +43,7 @@ export default {
 			mark: 'OFF',
 			buildings: [],
 
-		
+			
 		}
 		
 	},
@@ -68,14 +68,14 @@ export default {
 			
 			if(evt){
 				token = data.device_token_on;
-				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
+				//axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
 			}else{
 				token = data.device_token_off;
-				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
+				//axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
 			}
 
-			fetch(`http://${data.device_ip}/${token}`);
-			//axios.get('/test-switch')
+			//fetch(`http://${data.device_ip}/${token}`);
+			axios.get('/test-switch')
 			
 		},
 
@@ -83,11 +83,27 @@ export default {
 			axios.get('/load-switch-buildings').then(res=>{
 				this.buildings = res.data;
 			})
+		},
+
+		getNotifications(){
+			//dere ang codes
+			console.log('fire every 30sec');
+		},
+
+		test(){
+			let checkboxes = document.querySelectorAll('switch');
+			console.log(checkboxes);
 		}
 	},
 
 	mounted(){
 		this.initData();
+
+		window.setInterval(() => {
+			this.getNotifications()
+		}, 30000);
+
+		this.test();
 		
 	}
 }
