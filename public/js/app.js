@@ -7968,24 +7968,23 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       mark: 'OFF',
-      buildings: []
+      buildings: [],
+      s: false
     };
   },
   methods: {
     switch1: function switch1() {
       axios__WEBPACK_IMPORTED_MODULE_0___default().post('/').then(function (res) {});
     },
-    invokeSwitch: function invokeSwitch(evt, data) {
+    invokeSwitch: function invokeSwitch(evt, data, index, ix) {
       var token = '';
 
       if (evt) {
         token = data.device_token_on;
         axios__WEBPACK_IMPORTED_MODULE_0___default().get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON');
-        this.mark = 'ON';
       } else {
         token = data.device_token_off;
         axios__WEBPACK_IMPORTED_MODULE_0___default().get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF');
-        this.mark = 'OFF';
       }
 
       fetch("http://".concat(data.device_ip, "/").concat(token));
@@ -34890,8 +34889,20 @@ var render = function () {
                                   attrs: { value: false, type: "is-success" },
                                   on: {
                                     input: function ($event) {
-                                      return _vm.invokeSwitch($event, i)
+                                      return _vm.invokeSwitch(
+                                        $event,
+                                        i,
+                                        index,
+                                        ix
+                                      )
                                     },
+                                  },
+                                  model: {
+                                    value: i.s,
+                                    callback: function ($$v) {
+                                      _vm.$set(i, "s", $$v)
+                                    },
+                                    expression: "i.s",
                                   },
                                 },
                                 [
@@ -34906,7 +34917,7 @@ var render = function () {
                             1
                           ),
                           _vm._v(" "),
-                          _c("div", [_vm._v(_vm._s(_vm.mark))]),
+                          _c("div", [_vm._v(_vm._s(i.s))]),
                         ],
                         1
                       )

@@ -14,11 +14,11 @@
 							<hr>
 							<div>{{ i.floor_name }}</div>
 							<b-field :label="i.device_name">
-								<b-switch :value="false" @input="invokeSwitch($event, i)" type="is-success">
+								<b-switch :value="false" @input="invokeSwitch($event, i, index, ix)" v-model="i.s" type="is-success">
 									{{ i.room }}
 								</b-switch>
 							</b-field>
-							<div>{{ mark }}</div>
+							<div>{{ i.s }}</div>
 						</div>
 					</div>
 				</div>
@@ -41,6 +41,8 @@ export default {
 		return{
 			mark: 'OFF',
 			buildings: [],
+
+			s: false,
 		}
 		
 	},
@@ -50,19 +52,17 @@ export default {
 			})
 		},
 
-		invokeSwitch(evt, data){
+		invokeSwitch(evt, data, index, ix){
 
 			 let token = '';
+		
 			if(evt){
 				token = data.device_token_on;
 				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
-				this.mark = 'ON';
 			}else{
 				token = data.device_token_off;
 				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
-				this.mark = 'OFF';
 			}
-
 			fetch(`http://${data.device_ip}/${token}`);
 			
 		},
