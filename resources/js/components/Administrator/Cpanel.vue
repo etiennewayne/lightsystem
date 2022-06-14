@@ -54,15 +54,11 @@ export default {
 		},
 	
 		invokeSwitch(evt, data, index, ix){
-
 			let token = '';
 
 			// console.log(data.room_id);
-		
 			// var swQ = document.querySelector("switch").querySelectorAll('checkbox');
-
 			// var sw = document.getElementById(data.room_id);
-
 			// console.log(sw);
 			// console.log(swQ);
 			
@@ -87,11 +83,19 @@ export default {
 
 		getNotifications(){
 			//dere ang codes
-			console.log('fire every 30sec');
+			this.buildings.forEach(d => {
+				//foreach devices
+				d.devices.forEach(el =>{
+					console.log(el);
+					//let checkboxes = document.querySelector('input[type=checkbox]');
+					//console.log(checkboxes);
+				});
+			});
+			
 		},
 
 		test(){
-			let checkboxes = document.getElementById('switch[0][1]');
+			let checkboxes = document.getElementById('switch[0][2]');
 			console.log(checkboxes);
 		}
 	},

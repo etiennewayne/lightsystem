@@ -7984,13 +7984,14 @@ __webpack_require__.r(__webpack_exports__);
       // console.log(swQ);
 
       if (evt) {
-        token = data.device_token_on; //axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
+        token = data.device_token_on;
+        axios__WEBPACK_IMPORTED_MODULE_0___default().get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON');
       } else {
-        token = data.device_token_off; //axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
-      } //fetch(`http://${data.device_ip}/${token}`);
+        token = data.device_token_off;
+        axios__WEBPACK_IMPORTED_MODULE_0___default().get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF');
+      }
 
-
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get('/test-switch');
+      fetch("http://".concat(data.device_ip, "/").concat(token)); //axios.get('/test-switch')
     },
     initData: function initData() {
       var _this = this;
@@ -8001,10 +8002,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     getNotifications: function getNotifications() {
       //dere ang codes
-      console.log('fire every 30sec');
+      this.buildings.forEach(function (d) {
+        //foreach devices
+        d.devices.forEach(function (el) {
+          console.log(el); //let checkboxes = document.querySelector('input[type=checkbox]');
+          //console.log(checkboxes);
+        });
+      });
     },
     test: function test() {
-      var checkboxes = document.getElementById('switch[0][1]');
+      var checkboxes = document.getElementById('switch[0][2]');
       console.log(checkboxes);
     }
   },
