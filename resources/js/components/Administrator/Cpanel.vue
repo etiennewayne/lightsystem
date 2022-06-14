@@ -14,7 +14,7 @@
 							<hr>
 							<div>{{ i.floor_name }}</div>
 							<b-field :label="i.device_name">
-								<b-switch :value="false" @input="invokeSwitch($event, i, index, ix)" :id="i.room_id" v-model="i.s" type="is-success">
+								<b-switch :value="false" @input="invokeSwitch($event, i, index, ix)" :id="`switch[${index}][${i.room_id}]`" v-model="i.s" type="is-success">
 									{{ i.room }}
 								</b-switch>
 							</b-field>
@@ -91,7 +91,7 @@ export default {
 		},
 
 		test(){
-			let checkboxes = document.querySelectorAll('switch');
+			let checkboxes = document.getElementById('switch[0][1]');
 			console.log(checkboxes);
 		}
 	},
