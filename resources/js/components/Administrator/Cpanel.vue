@@ -68,14 +68,14 @@ export default {
 			
 			if(evt){
 				token = data.device_token_on;
-				//axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
+				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
 			}else{
 				token = data.device_token_off;
-				//axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
+				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
 			}
 
-			//fetch(`http://${data.device_ip}/${token}`);
-			axios.get('/test-switch')
+			fetch(`http://${data.device_ip}/${token}`);
+			//axios.get('/test-switch')
 			
 		},
 
