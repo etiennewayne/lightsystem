@@ -16,7 +16,9 @@ class CreateSchedulesTable extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id('schedule_id');
             $table->unsignedBigInteger('device_id');
-            $table->foreign('device_id')->references('device_id')->on('devices');
+            $table->foreign('device_id')->references('device_id')->on('devices')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('schedule_name')->nullable();
             $table->dateTime('date_time')->nullable();
             $table->string('system_action')->nullable();

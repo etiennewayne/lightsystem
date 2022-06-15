@@ -27,7 +27,9 @@ class CreateUsersTable extends Migration
             $table->string('role')->nullable();
 
             $table->unsignedBigInteger('group_role_id');
-            $table->foreign('group_role_id')->references('group_role_id')->on('group_roles');
+            $table->foreign('group_role_id')->references('group_role_id')->on('group_roles')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -23,7 +23,9 @@ class CreateDevicesTable extends Migration
             // $table->foreign('floor_id')->references('floor_id')->on('floors');
 
             $table->unsignedBigInteger('room_id');
-            $table->foreign('room_id')->references('room_id')->on('rooms');
+            $table->foreign('room_id')->references('room_id')->on('rooms')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table->string('device_name')->nullable();
             $table->string('device_ip')->nullable();

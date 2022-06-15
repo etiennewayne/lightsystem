@@ -17,10 +17,14 @@ class CreateRoomsTable extends Migration
             $table->id('room_id');
 
             $table->unsignedBigInteger('building_id');
-            $table->foreign('building_id')->references('building_id')->on('buildings');
+            $table->foreign('building_id')->references('building_id')->on('buildings')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table->unsignedBigInteger('floor_id');
-            $table->foreign('floor_id')->references('floor_id')->on('floors');
+            $table->foreign('floor_id')->references('floor_id')->on('floors')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table->string('room')->nullable();
             $table->timestamps();

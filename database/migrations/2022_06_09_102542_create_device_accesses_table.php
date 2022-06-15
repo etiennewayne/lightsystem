@@ -17,10 +17,14 @@ class CreateDeviceAccessesTable extends Migration
             $table->id('device_access_id');
 
             $table->unsignedBigInteger('device_id');
-            $table->foreign('device_id')->references('device_id')->on('devices');
+            $table->foreign('device_id')->references('device_id')->on('devices')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table->unsignedBigInteger('group_role_id');
-            $table->foreign('group_role_id')->references('group_role_id')->on('group_roles');
+            $table->foreign('group_role_id')->references('group_role_id')->on('group_roles')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
 
             $table->timestamps();
