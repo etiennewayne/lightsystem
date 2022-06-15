@@ -31,7 +31,7 @@ class DeviceAccessController extends Controller
             ->find($id);
     }
 
-     public function getDevicesAccesses(Request $req){
+    public function getDevicesAccesses(Request $req){
          $sort = explode('.', $req->sort_by);
 
         return DeviceAccess::with(['device', 'group_role'])
@@ -39,23 +39,41 @@ class DeviceAccessController extends Controller
             ->paginate($req->perpage);
     }
 
+    public function loadAccessRoleIfAny($deviceId){
+        return \DB::table('device_accesses as a')
+            ->join('devices as b', 'a.device_id', 'b.device_id')
+            ->join('group_roles as c', 'a.group_role_id', 'c.group_role_id')
+            ->where('a.device_id', $deviceId)
+            //->select('a.group_role_id', 'c.group_role_name')
+            ->get();
+    }
+
     public function store(Request $req){
 
-        //return $req;
 
         $req->validate([
-            'device' => ['required'],
+            'device_id' => ['required'],
             'tags.*' => ['required']
         ], $message = [
+            'device_id.required' => 'Device is required.',
             'tags.required' => 'Please select atleast 1 role.'
         ]);
 
 
         foreach($req->tags as $item){
-            $data = DeviceAccess::create([
-                'device_id' => $req->device,
-                'group_role_id' => $item['group_role_id']
-            ]);
+
+            $data = DeviceAccess::updateOrCreate(
+                [
+                    'device_id' => $req->device_id, 
+                    'group_role_id' => $item['group_role_id']
+                ],
+                [
+                    'device_id' => $req->device_id, 
+                    'group_role_id' => $item['group_role_id']
+                ]
+            );
+
+            
         }
 
         // $data = DeviceAccess::create([

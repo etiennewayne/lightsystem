@@ -8682,6 +8682,74 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -8702,6 +8770,7 @@ __webpack_require__.r(__webpack_exports__);
         device: ''
       },
       isModalCreate: false,
+      modalAccessRole: false,
       fields: {
         device_name: null,
         device_ip: null,
@@ -8709,12 +8778,20 @@ __webpack_require__.r(__webpack_exports__);
         device_token_off: null
       },
       errors: {},
+      accessfields: {
+        device_id: 0,
+        tags: []
+      },
       btnClass: {
         'is-success': true,
         'button': true,
         'is-loading': false
       },
-      rooms: []
+      rooms: [],
+      group_roles: [],
+      filterTags: [],
+      tags: [],
+      device_accesses: []
     };
   },
   methods: {
@@ -8884,11 +8961,107 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/load-open-rooms').then(function (res) {
         _this6.rooms = res.data;
       });
+    },
+    openModalAccessRole: function openModalAccessRole(dataId) {
+      this.modalAccessRole = true;
+      this.accessfields = {
+        device_id: 0,
+        tags: []
+      };
+      this.accessfields.device_id = dataId; //this.accessfields.tags = {};
+
+      this.getFilteredTags("");
+      this.loadAccessRoleIfAny(dataId);
+    },
+    loadAccessRoleIfAny: function loadAccessRoleIfAny(dataId) {
+      var _this7 = this;
+
+      this.device_accesses = [];
+      axios.get('/load-access-role-if-any/' + dataId).then(function (res) {
+        _this7.device_accesses = res.data;
+        _this7.accessfields.tags = _this7.device_accesses;
+      });
+    },
+    getFilteredTags: function getFilteredTags(text) {
+      this.filterTags = this.group_roles.filter(function (option) {
+        return option.group_role_name.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0;
+      });
+    },
+    loadGroupRoles: function loadGroupRoles() {
+      var _this8 = this;
+
+      axios.get('/load-open-group-roles').then(function (res) {
+        _this8.group_roles = res.data;
+      });
+    },
+    removeAccessRole: function removeAccessRole(i) {
+      var _this9 = this;
+
+      //console.log(i);
+      axios["delete"]('/device-accesses/' + i.device_access_id).then(function (res) {
+        _this9.$buefy.toast.open({
+          message: 'Access role removed.',
+          type: 'is-success'
+        });
+      });
+    },
+    submitAccessRole: function submitAccessRole() {
+      var _this10 = this;
+
+      if (this.accessfields.device_access_id > 0) {
+        //update
+        axios.put('/device-accesses/' + this.device_access_id, this.fields).then(function (res) {
+          if (res.data.status === 'updated') {
+            _this10.$buefy.dialog.alert({
+              title: 'UPDATED!',
+              message: 'Successfully updated.',
+              type: 'is-success',
+              onConfirm: function onConfirm() {
+                _this10.loadAsyncData();
+
+                _this10.clearFields();
+
+                _this10.global_id = 0;
+                _this10.modalAccessRole = false;
+              }
+            });
+          }
+        })["catch"](function (err) {
+          if (err.response.status === 422) {
+            _this10.errors = err.response.data.errors;
+          }
+        });
+      } else {
+        //INSERT HERE
+        axios.post('/device-accesses', this.accessfields).then(function (res) {
+          if (res.data.status === 'saved') {
+            _this10.$buefy.dialog.alert({
+              title: 'SAVED!',
+              message: 'Successfully saved.',
+              type: 'is-success',
+              confirmText: 'OK',
+              onConfirm: function onConfirm() {
+                _this10.isModalCreate = false;
+
+                _this10.loadAsyncData();
+
+                _this10.accessfields = {};
+                _this10.modalAccessRole = false;
+              }
+            });
+          }
+        })["catch"](function (err) {
+          if (err.response.status === 422) {
+            _this10.errors = err.response.data.errors;
+          }
+        });
+      }
     }
   },
   mounted: function mounted() {
     this.loadAsyncData();
-    this.loadBuildings(); // this.loadFloors();
+    this.loadBuildings();
+    this.loadGroupRoles(); // this.loadFloors();
   }
 });
 
@@ -36053,6 +36226,33 @@ var render = function () {
                                     ],
                                     1
                                   ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-tooltip",
+                                    {
+                                      attrs: {
+                                        label: "Access Role",
+                                        type: "is-info",
+                                      },
+                                    },
+                                    [
+                                      _c("b-button", {
+                                        staticClass:
+                                          "button is-small is-info mr-1",
+                                        attrs: {
+                                          "icon-right": "account-key-outline",
+                                        },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.openModalAccessRole(
+                                              props.row.device_id
+                                            )
+                                          },
+                                        },
+                                      }),
+                                    ],
+                                    1
+                                  ),
                                 ],
                                 1
                               ),
@@ -36368,6 +36568,160 @@ var render = function () {
                         class: _vm.btnClass,
                         attrs: { label: "Save", type: "is-success" },
                       },
+                      [_vm._v("SAVE")]
+                    ),
+                  ],
+                  1
+                ),
+              ]),
+            ]
+          ),
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          attrs: {
+            "has-modal-card": "",
+            "trap-focus": "",
+            width: 640,
+            "aria-role": "dialog",
+            "aria-label": "Modal",
+            "aria-modal": "",
+            type: "is-link",
+          },
+          model: {
+            value: _vm.modalAccessRole,
+            callback: function ($$v) {
+              _vm.modalAccessRole = $$v
+            },
+            expression: "modalAccessRole",
+          },
+        },
+        [
+          _c(
+            "form",
+            {
+              on: {
+                submit: function ($event) {
+                  $event.preventDefault()
+                  return _vm.submitAccessRole.apply(null, arguments)
+                },
+              },
+            },
+            [
+              _c("div", { staticClass: "modal-card" }, [
+                _c("header", { staticClass: "modal-card-head" }, [
+                  _c("p", { staticClass: "modal-card-title" }, [
+                    _vm._v("Set Access Role"),
+                  ]),
+                  _vm._v(" "),
+                  _c("button", {
+                    staticClass: "delete",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function ($event) {
+                        _vm.modalAccessRole = false
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("section", { staticClass: "modal-card-body" }, [
+                  _c("div", {}, [
+                    _c("div", { staticClass: "columns" }, [
+                      _c(
+                        "div",
+                        { staticClass: "column" },
+                        [
+                          _c(
+                            "b-field",
+                            {
+                              staticClass: "mb-4",
+                              attrs: { label: "Group Role" },
+                            },
+                            [
+                              _c("b-taginput", {
+                                attrs: {
+                                  data: _vm.filterTags,
+                                  autocomplete: "",
+                                  field: "group_role_name",
+                                  icon: "label",
+                                  placeholder: "Add a access role",
+                                  type: "is-info",
+                                  "open-on-focus": true,
+                                },
+                                on: {
+                                  remove: _vm.removeAccessRole,
+                                  typing: _vm.getFilteredTags,
+                                },
+                                scopedSlots: _vm._u([
+                                  {
+                                    key: "default",
+                                    fn: function (props) {
+                                      return [
+                                        _c("strong", [
+                                          _vm._v(
+                                            _vm._s(props.option.group_role_id)
+                                          ),
+                                        ]),
+                                        _vm._v(
+                                          ": " +
+                                            _vm._s(
+                                              props.option.group_role_name
+                                            ) +
+                                            "\n                                        "
+                                        ),
+                                      ]
+                                    },
+                                  },
+                                  {
+                                    key: "empty",
+                                    fn: function () {
+                                      return [
+                                        _vm._v(
+                                          "\n                                            There are no items\n                                        "
+                                        ),
+                                      ]
+                                    },
+                                    proxy: true,
+                                  },
+                                ]),
+                                model: {
+                                  value: _vm.accessfields.tags,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.accessfields, "tags", $$v)
+                                  },
+                                  expression: "accessfields.tags",
+                                },
+                              }),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                    ]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "footer",
+                  { staticClass: "modal-card-foot" },
+                  [
+                    _c("b-button", {
+                      attrs: { label: "Close" },
+                      on: {
+                        click: function ($event) {
+                          _vm.modalAccessRole = false
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      { class: _vm.btnClass, attrs: { type: "is-success" } },
                       [_vm._v("SAVE")]
                     ),
                   ],
@@ -37485,17 +37839,6 @@ var render = function () {
                               icon: "cellphone-link",
                               tag: "a",
                               href: "/devices",
-                            },
-                          })
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.user.role === "ADMINISTRATOR"
-                        ? _c("b-menu-item", {
-                            attrs: {
-                              label: "Device Accesses",
-                              icon: "shield-lock",
-                              tag: "a",
-                              href: "/device-accesses",
                             },
                           })
                         : _vm._e(),

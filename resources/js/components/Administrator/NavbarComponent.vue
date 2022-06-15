@@ -36,7 +36,7 @@
 
                             <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Device" icon="cellphone-link" tag="a" href="/devices"></b-menu-item>
 
-                            <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Device Accesses" icon="shield-lock" tag="a" href="/device-accesses"></b-menu-item>
+                            <!-- <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Device Accesses" icon="shield-lock" tag="a" href="/device-accesses"></b-menu-item> -->
 
                             <b-menu-item label="Schedule" icon="domain" tag="a" href="/schedules"></b-menu-item>
                             

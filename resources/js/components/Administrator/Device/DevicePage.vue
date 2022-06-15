@@ -97,6 +97,9 @@
                                     <b-tooltip label="Delete" type="is-danger">
                                         <b-button class="button is-small is-danger mr-1" icon-right="delete" @click="confirmDelete(props.row.device_id)"></b-button>
                                     </b-tooltip>
+                                     <b-tooltip label="Access Role" type="is-info">
+                                        <b-button class="button is-small is-info mr-1" icon-right="account-key-outline" @click="openModalAccessRole(props.row.device_id)"></b-button>
+                                    </b-tooltip>
                                 </div>
                             </b-table-column>
 
@@ -204,6 +207,71 @@
         <!--close modal-->
 
 
+
+        <!--modal create-->
+        <b-modal v-model="modalAccessRole" has-modal-card
+                 trap-focus
+                 :width="640"
+                 aria-role="dialog"
+                 aria-label="Modal"
+                 aria-modal
+                 type = "is-link">
+
+            <form @submit.prevent="submitAccessRole">
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Set Access Role</p>
+                        <button
+                            type="button"
+                            class="delete"
+                            @click="modalAccessRole = false" />
+                    </header>
+
+                    <section class="modal-card-body">
+                        <div class="">
+                            <div class="columns">
+                                <div class="column">
+
+                                    <b-field label="Group Role" class="mb-4">
+                                        <b-taginput
+                                            v-model="accessfields.tags"
+                                            :data="filterTags"
+                                            autocomplete
+                                            field="group_role_name"
+                                            icon="label"
+                                            placeholder="Add a access role"
+                                            type="is-info"
+                                            @remove="removeAccessRole"
+                                            :open-on-focus="true"
+                                            @typing="getFilteredTags">
+                                            <template v-slot="props">
+                                                <strong>{{props.option.group_role_id}}</strong>: {{props.option.group_role_name}}
+                                            </template>
+                                            <template #empty>
+                                                There are no items
+                                            </template>
+                                        </b-taginput>
+                                    </b-field>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <footer class="modal-card-foot">
+                        <b-button
+                            label="Close"
+                            @click="modalAccessRole=false"/>
+                        <button
+                            :class="btnClass"
+                            type="is-success">SAVE</button>
+                    </footer>
+                </div>
+            </form><!--close form-->
+        </b-modal>
+        <!--close modal-->
+
+
+
     </div>
 </template>
 
@@ -235,6 +303,7 @@ export default {
             },
 
             isModalCreate: false,
+            modalAccessRole: false,
 
             fields: {
                 device_name : null,
@@ -244,6 +313,11 @@ export default {
             },
             errors: {},
 
+            accessfields: {
+                device_id: 0,
+                tags: [],
+            },
+
             btnClass: {
                 'is-success': true,
                 'button': true,
@@ -252,6 +326,13 @@ export default {
 
       
             rooms: [],
+
+            group_roles: [],
+
+            filterTags: [],
+            tags: [],
+
+            device_accesses: [],
 
         }
     },
@@ -429,6 +510,103 @@ export default {
         },
 
 
+        openModalAccessRole(dataId){
+            this.modalAccessRole = true;
+
+            this.accessfields = {
+                device_id: 0,
+                tags: [],
+            };
+
+
+            this.accessfields.device_id = dataId;
+
+            //this.accessfields.tags = {};
+            this.getFilteredTags("");
+            this.loadAccessRoleIfAny(dataId);
+        },
+
+        loadAccessRoleIfAny(dataId){
+            this.device_accesses = [];
+            axios.get('/load-access-role-if-any/'+ dataId).then(res=>{
+                this.device_accesses = res.data;
+                this.accessfields.tags = this.device_accesses;
+            });
+        },
+
+        getFilteredTags(text) {
+            this.filterTags = this.group_roles.filter((option) => {
+                return option.group_role_name
+                    .toString()
+                    .toLowerCase()
+                    .indexOf(text.toLowerCase()) >= 0
+            })
+        },
+
+        loadGroupRoles(){
+            axios.get('/load-open-group-roles').then(res=>{
+                this.group_roles = res.data;
+            })
+        },
+
+        removeAccessRole(i){
+            //console.log(i);
+            axios.delete('/device-accesses/' + i.device_access_id).then(res=>{
+                this.$buefy.toast.open({
+                    message: 'Access role removed.',
+                    type: 'is-success'
+                })
+            })
+        },
+
+        submitAccessRole: function(){
+            if(this.accessfields.device_access_id > 0){
+                //update
+                axios.put('/device-accesses/'+this.device_access_id, this.fields).then(res=>{
+                    if(res.data.status === 'updated'){
+                        this.$buefy.dialog.alert({
+                            title: 'UPDATED!',
+                            message: 'Successfully updated.',
+                            type: 'is-success',
+                            onConfirm: () => {
+                                this.loadAsyncData();
+                                this.clearFields();
+                                this.global_id = 0;
+                                this.modalAccessRole = false;
+                            }
+                        })
+                    }
+                }).catch(err=>{
+                    if(err.response.status === 422){
+                        this.errors = err.response.data.errors;
+                    }
+                })
+            }else{
+                //INSERT HERE
+                axios.post('/device-accesses', this.accessfields).then(res=>{
+                    if(res.data.status === 'saved'){
+                        this.$buefy.dialog.alert({
+                            title: 'SAVED!',
+                            message: 'Successfully saved.',
+                            type: 'is-success',
+                            confirmText: 'OK',
+                            onConfirm: () => {
+                                this.isModalCreate = false;
+                                this.loadAsyncData();
+                                this.accessfields = {};
+                                this.modalAccessRole = false;
+                            }
+                        })
+                    }
+                }).catch(err=>{
+                    if(err.response.status === 422){
+                        this.errors = err.response.data.errors;
+                    }
+                });
+            }
+        },
+
+
 
     },
 
@@ -436,6 +614,7 @@ export default {
 
         this.loadAsyncData();
         this.loadBuildings();
+        this.loadGroupRoles();
        // this.loadFloors();
     }
 

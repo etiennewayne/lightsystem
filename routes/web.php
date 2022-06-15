@@ -104,6 +104,9 @@ Route::get('/get-devices', [App\Http\Controllers\Administrator\DeviceController:
 Route::resource('/device-accesses', App\Http\Controllers\Administrator\DeviceAccessController::class);
 Route::get('/get-device-accesses', [App\Http\Controllers\Administrator\DeviceAccessController::class, 'getDevicesAccesses']);
 
+Route::get('/load-access-role-if-any/{id}', [App\Http\Controllers\Administrator\DeviceAccessController::class, 'loadAccessRoleIfAny']);
+
+
 
 //Schedule
 Route::resource('/schedules', App\Http\Controllers\Administrator\ScheduleController::class);
@@ -146,7 +149,9 @@ Route::get('/load-open-devices', function(){
     return Device::with('room')->orderBy('device_name', 'asc')->get();
 });
 Route::get('/load-open-group-roles', function(){
-    return GroupRole::orderBy('group_role_name', 'asc')->get();
+    return GroupRole::orderBy('group_role_name', 'asc')
+        ->select('group_role_id', 'group_role_name')
+        ->get();
 });
 
 
