@@ -41,15 +41,27 @@ class DeviceAccessController extends Controller
 
     public function store(Request $req){
 
+        //return $req;
+
         $req->validate([
             'device' => ['required'],
-            'group_role' => ['required']
+            'tags.*' => ['required']
+        ], $message = [
+            'tags.required' => 'Please select atleast 1 role.'
         ]);
 
-        $data = DeviceAccess::create([
-            'device_id' => $req->device,
-            'group_role_id' => $req->group_role
-        ]);
+
+        foreach($req->tags as $item){
+            $data = DeviceAccess::create([
+                'device_id' => $req->device,
+                'group_role_id' => $item['group_role_id']
+            ]);
+        }
+
+        // $data = DeviceAccess::create([
+        //     'device_id' => $req->device,
+        //     'group_role_id' => $req->group_role
+        // ]);
 
         $user = Auth::user();
         Syslog::create([

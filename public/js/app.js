@@ -8216,6 +8216,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -8240,7 +8260,8 @@ __webpack_require__.r(__webpack_exports__);
         device_name: null,
         device_ip: null,
         device_token_on: null,
-        device_token_off: null
+        device_token_off: null,
+        tags: []
       },
       errors: {},
       btnClass: {
@@ -8249,7 +8270,9 @@ __webpack_require__.r(__webpack_exports__);
         'is-loading': false
       },
       devices: [],
-      group_roles: []
+      group_roles: [],
+      filterTags: [],
+      tags: []
     };
   },
   methods: {
@@ -8303,6 +8326,7 @@ __webpack_require__.r(__webpack_exports__);
       this.isModalCreate = true;
       this.clearFields();
       this.errors = {};
+      this.getFilteredTags("");
     },
     //alert box ask for deletion
     confirmDelete: function confirmDelete(delete_id) {
@@ -8350,8 +8374,14 @@ __webpack_require__.r(__webpack_exports__);
         device_name: null,
         device_ip: null,
         device_token_on: null,
-        device_token_off: null
+        device_token_off: null,
+        tags: []
       };
+    },
+    getFilteredTags: function getFilteredTags(text) {
+      this.filterTags = this.group_roles.filter(function (option) {
+        return option.group_role_name.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0;
+      });
     },
     submit: function submit() {
       var _this5 = this;
@@ -8858,8 +8888,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.loadAsyncData();
-    this.loadBuildings();
-    this.loadFloors();
+    this.loadBuildings(); // this.loadFloors();
   }
 });
 
@@ -35494,44 +35523,61 @@ var render = function () {
                           _c(
                             "b-field",
                             {
-                              attrs: {
-                                label: "Group Role",
-                                expanded: "",
-                                type: this.errors.group_role ? "is-danger" : "",
-                                message: this.errors.group_role
-                                  ? this.errors.group_role[0]
-                                  : "",
-                              },
+                              staticClass: "mb-4",
+                              attrs: { label: "Group Role" },
                             },
                             [
-                              _c(
-                                "b-select",
-                                {
-                                  attrs: {
-                                    expanded: "",
-                                    placeholder: "Group Role",
-                                    required: "",
-                                  },
-                                  model: {
-                                    value: _vm.fields.group_role,
-                                    callback: function ($$v) {
-                                      _vm.$set(_vm.fields, "group_role", $$v)
-                                    },
-                                    expression: "fields.group_role",
-                                  },
+                              _c("b-taginput", {
+                                attrs: {
+                                  data: _vm.filterTags,
+                                  autocomplete: "",
+                                  field: "group_role_name",
+                                  icon: "label",
+                                  placeholder: "Add a tag",
+                                  type: "is-info",
+                                  "open-on-focus": true,
                                 },
-                                _vm._l(_vm.group_roles, function (item, index) {
-                                  return _c(
-                                    "option",
-                                    {
-                                      key: index,
-                                      domProps: { value: item.group_role_id },
+                                on: { typing: _vm.getFilteredTags },
+                                scopedSlots: _vm._u([
+                                  {
+                                    key: "default",
+                                    fn: function (props) {
+                                      return [
+                                        _c("strong", [
+                                          _vm._v(
+                                            _vm._s(props.option.group_role_id)
+                                          ),
+                                        ]),
+                                        _vm._v(
+                                          ": " +
+                                            _vm._s(
+                                              props.option.group_role_name
+                                            ) +
+                                            "\n                                        "
+                                        ),
+                                      ]
                                     },
-                                    [_vm._v(_vm._s(item.group_role_name))]
-                                  )
-                                }),
-                                0
-                              ),
+                                  },
+                                  {
+                                    key: "empty",
+                                    fn: function () {
+                                      return [
+                                        _vm._v(
+                                          "\n                                            There are no items\n                                        "
+                                        ),
+                                      ]
+                                    },
+                                    proxy: true,
+                                  },
+                                ]),
+                                model: {
+                                  value: _vm.fields.tags,
+                                  callback: function ($$v) {
+                                    _vm.$set(_vm.fields, "tags", $$v)
+                                  },
+                                  expression: "fields.tags",
+                                },
+                              }),
                             ],
                             1
                           ),

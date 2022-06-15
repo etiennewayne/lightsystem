@@ -141,13 +141,33 @@
                                         </b-select>
                                     </b-field>
 
-                                     <b-field label="Group Role" expanded
+                                    <!-- <b-field label="Group Role" expanded
                                              :type="this.errors.group_role ? 'is-danger':''"
                                              :message="this.errors.group_role ? this.errors.group_role[0] : ''">
                                         <b-select v-model="fields.group_role" expanded
                                                 placeholder="Group Role" required>
                                                 <option v-for="(item, index) in group_roles" :key="index" :value="item.group_role_id">{{ item.group_role_name }}</option>
                                         </b-select>
+                                    </b-field> -->
+
+                                    <b-field label="Group Role" class="mb-4">
+                                        <b-taginput
+                                            v-model="fields.tags"
+                                            :data="filterTags"
+                                            autocomplete
+                                            field="group_role_name"
+                                            icon="label"
+                                            placeholder="Add a tag"
+                                            type="is-info"
+                                            :open-on-focus="true"
+                                            @typing="getFilteredTags">
+                                            <template v-slot="props">
+                                                <strong>{{props.option.group_role_id}}</strong>: {{props.option.group_role_name}}
+                                            </template>
+                                            <template #empty>
+                                                There are no items
+                                            </template>
+                                        </b-taginput>
                                     </b-field>
 
                                     
@@ -207,6 +227,7 @@ export default {
                 device_ip: null,
                 device_token_on: null,
                 device_token_off: null,
+                tags: [],
             },
             errors: {},
 
@@ -219,6 +240,10 @@ export default {
       
             devices: [],
             group_roles: [],
+
+
+            filterTags: [],
+            tags: []
 
         }
     },
@@ -279,8 +304,7 @@ export default {
             this.isModalCreate=true;
             this.clearFields();
             this.errors = {};
-
-
+            this.getFilteredTags("");
         },
 
         //alert box ask for deletion
@@ -326,8 +350,17 @@ export default {
                 device_ip: null,
                 device_token_on: null,
                 device_token_off: null,
-
+                tags: [],
             };
+        },
+
+        getFilteredTags(text) {
+            this.filterTags = this.group_roles.filter((option) => {
+                return option.group_role_name
+                    .toString()
+                    .toLowerCase()
+                    .indexOf(text.toLowerCase()) >= 0
+            })
         },
 
 

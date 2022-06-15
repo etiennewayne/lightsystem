@@ -436,7 +436,7 @@ export default {
 
         this.loadAsyncData();
         this.loadBuildings();
-        this.loadFloors();
+       // this.loadFloors();
     }
 
 }
