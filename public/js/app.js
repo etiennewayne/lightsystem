@@ -7969,7 +7969,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       mark: 'OFF',
-      buildings: []
+      buildings: [],
+      checkBoxes: [],
+      bulbStatus: false
     };
   },
   methods: {
@@ -8001,26 +8003,44 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getNotifications: function getNotifications() {
+      var _this2 = this;
+
       //dere ang codes
       this.buildings.forEach(function (d) {
         //foreach devices
         d.devices.forEach(function (el) {
-          console.log(el); //let checkboxes = document.querySelector('input[type=checkbox]');
+          //console.log(el);
+          //let checkboxes = document.querySelector('input[type=checkbox]');
           //console.log(checkboxes);
+          //console.log(this.checkBoxes[el.device_id]);
+          //console.log(el.device_ip);
+          axios__WEBPACK_IMPORTED_MODULE_0___default().get("http://".concat(el.device_ip)).then(function (res) {
+            console.log(res.data);
+
+            if (res.data === 'ON') {
+              _this2.bulbStatus = true; //this.checkBoxes[el.device_id] = true;
+
+              console.log('TURNING ON');
+            } else {
+              _this2.checkBoxes[el.device_id] = false; //this.bulbStatus = true;
+
+              console.log('TURNING OFF');
+            }
+          });
         });
       });
     },
     test: function test() {
-      var checkboxes = document.getElementById('switch[0][2]');
-      console.log(checkboxes);
+      var checkboxes = document.getElementById('switch[0][4]'); //console.log(checkboxes.querySelector('input[type=checkbox]'));
+      //console.log(checkboxes.value);
     }
   },
   mounted: function mounted() {
-    var _this2 = this;
+    var _this3 = this;
 
     this.initData();
     window.setInterval(function () {
-      _this2.getNotifications();
+      _this3.getNotifications();
     }, 30000);
     this.test();
   }
@@ -35133,11 +35153,11 @@ var render = function () {
                                     },
                                   },
                                   model: {
-                                    value: i.s,
+                                    value: _vm.checkBoxes[i.device_id],
                                     callback: function ($$v) {
-                                      _vm.$set(i, "s", $$v)
+                                      _vm.$set(_vm.checkBoxes, i.device_id, $$v)
                                     },
-                                    expression: "i.s",
+                                    expression: "checkBoxes[i.device_id]",
                                   },
                                 },
                                 [
@@ -35152,9 +35172,9 @@ var render = function () {
                             1
                           ),
                           _vm._v(" "),
-                          i.s
-                            ? _c("div", [_vm._v("ON")])
-                            : _c("div", [_vm._v("OFF")]),
+                          _vm.bulbStatus
+                            ? _c("div", [_vm._v("ONLINE")])
+                            : _c("div", [_vm._v("OFFLINE")]),
                         ],
                         1
                       )

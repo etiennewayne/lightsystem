@@ -14,12 +14,12 @@
 							<hr>
 							<div>{{ i.floor_name }}</div>
 							<b-field :label="i.device_name">
-								<b-switch :value="false" @input="invokeSwitch($event, i, index, ix)" :id="`switch[${index}][${i.room_id}]`" v-model="i.s" type="is-success">
+								<b-switch :value="false" @input="invokeSwitch($event, i, index, ix)" :id="`switch[${index}][${i.room_id}]`" v-model="checkBoxes[i.device_id]" type="is-success">
 									{{ i.room }}
 								</b-switch>
 							</b-field>
-							<div v-if="i.s">ON</div>
-							<div v-else>OFF</div>
+							<div v-if="bulbStatus">ONLINE</div>
+							<div v-else>OFFLINE</div>
 						</div>
 					</div>
 				</div>
@@ -43,6 +43,9 @@ export default {
 			mark: 'OFF',
 			buildings: [],
 
+			checkBoxes: [],
+
+			bulbStatus: false,
 			
 		}
 		
@@ -61,8 +64,9 @@ export default {
 			// var sw = document.getElementById(data.room_id);
 			// console.log(sw);
 			// console.log(swQ);
-			
+
 			if(evt){
+
 				token = data.device_token_on;
 				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
 			}else{
@@ -86,17 +90,33 @@ export default {
 			this.buildings.forEach(d => {
 				//foreach devices
 				d.devices.forEach(el =>{
-					console.log(el);
+					//console.log(el);
 					//let checkboxes = document.querySelector('input[type=checkbox]');
 					//console.log(checkboxes);
+					//console.log(this.checkBoxes[el.device_id]);
+					//console.log(el.device_ip);
+					axios.get(`http://${el.device_ip}`).then(res=>{
+						console.log(res.data);
+						if(res.data === 'ON'){
+							this.bulbStatus = true;
+							//this.checkBoxes[el.device_id] = true;
+							console.log('TURNING ON');
+						}else{
+							this.checkBoxes[el.device_id] = false;
+							//this.bulbStatus = true;
+							console.log('TURNING OFF');
+
+						}
+					})
 				});
 			});
 			
 		},
 
 		test(){
-			let checkboxes = document.getElementById('switch[0][2]');
-			console.log(checkboxes);
+			let checkboxes = document.getElementById('switch[0][4]');
+			//console.log(checkboxes.querySelector('input[type=checkbox]'));
+			//console.log(checkboxes.value);
 		}
 	},
 
