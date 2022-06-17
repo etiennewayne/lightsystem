@@ -116,29 +116,12 @@ export default {
 							status.className = 'offline';
 						}
 					})
-
-					
-
 				});
 			});
 			
 		},
 
-		test(){
-
-			let checkboxes = document.getElementById('switch04').querySelector('input[type=checkbox]');
-			//this.checkBoxes['device4'] = false;
-			checkboxes.checked = true;
-			
-			//console.log(checkboxes);
-			//this.checkValue['device4'] = true;
-
-			// let checkboxes = document.getElementById('testcheck')
-			
-			// console.log(checkboxes);
-
-			// checkboxes.checked = true;
-		}
+	
 	},
 
 	created(){
@@ -150,7 +133,7 @@ export default {
 		
 		window.setInterval(() => {
 			this.getNotifications()
-		}, 30000);
+		}, 15000);
 
 
 

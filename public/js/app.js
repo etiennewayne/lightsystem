@@ -8030,15 +8030,6 @@ __webpack_require__.r(__webpack_exports__);
           });
         });
       });
-    },
-    test: function test() {
-      var checkboxes = document.getElementById('switch04').querySelector('input[type=checkbox]'); //this.checkBoxes['device4'] = false;
-
-      checkboxes.checked = true; //console.log(checkboxes);
-      //this.checkValue['device4'] = true;
-      // let checkboxes = document.getElementById('testcheck')
-      // console.log(checkboxes);
-      // checkboxes.checked = true;
     }
   },
   created: function created() {
@@ -8049,7 +8040,7 @@ __webpack_require__.r(__webpack_exports__);
 
     window.setInterval(function () {
       _this2.getNotifications();
-    }, 30000); //this.test();
+    }, 15000); //this.test();
   }
 });
 
