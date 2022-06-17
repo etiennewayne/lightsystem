@@ -3,6 +3,7 @@
 
 		<div class="section">
 
+
 			<div class="building-container">
 				<div class="building" v-for="(item, index) in buildings" :key="index">
 					<div class="box" v-if="item.devices.length > 0">
@@ -14,17 +15,22 @@
 							<hr>
 							<div>{{ i.floor_name }}</div>
 							<b-field :label="i.device_name">
-								<b-switch :value="false" @input="invokeSwitch($event, i, index, ix)" :id="`switch[${index}][${i.room_id}]`" v-model="checkBoxes[i.device_id]" type="is-success">
+								<b-switch
+									@input="invokeSwitch($event, item, i)" :id="`switch${item.building_id}${i.device_id}`" 
+									v-model="i.s"
+									type="is-success">
 									{{ i.room }}
 								</b-switch>
 							</b-field>
-							<div v-if="bulbStatus">ONLINE</div>
-							<div v-else>OFFLINE</div>
+							<div class="offline" :id="`status${item.building_id}${i.device_id}`">OFFLINE</div>
+							
 						</div>
 					</div>
 				</div>
-
+			
 			</div><!--building-container-->
+
+			
 		</div>
 
 	</div>
@@ -43,10 +49,12 @@ export default {
 			mark: 'OFF',
 			buildings: [],
 
-			checkBoxes: [],
+			checkBoxes: {},
 
-			bulbStatus: false,
-			
+			checkValue: {},
+
+			switchValue: null,
+
 		}
 		
 	},
@@ -56,22 +64,20 @@ export default {
 			})
 		},
 	
-		invokeSwitch(evt, data, index, ix){
+		invokeSwitch(evt, building, data){
 			let token = '';
 
-			// console.log(data.room_id);
-			// var swQ = document.querySelector("switch").querySelectorAll('checkbox');
-			// var sw = document.getElementById(data.room_id);
-			// console.log(sw);
-			// console.log(swQ);
+			let status = document.getElementById(`status${building.building_id}${data.device_id}`);
+
 
 			if(evt){
-
 				token = data.device_token_on;
+				status.innerHTML = 'ONLINE';
 				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
 			}else{
 				token = data.device_token_off;
 				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
+				status.innerHTML = 'OFFLINE';
 			}
 
 			fetch(`http://${data.device_ip}/${token}`);
@@ -83,6 +89,10 @@ export default {
 			axios.get('/load-switch-buildings').then(res=>{
 				this.buildings = res.data;
 			})
+
+
+			
+
 		},
 
 		getNotifications(){
@@ -90,44 +100,61 @@ export default {
 			this.buildings.forEach(d => {
 				//foreach devices
 				d.devices.forEach(el =>{
-					//console.log(el);
-					//let checkboxes = document.querySelector('input[type=checkbox]');
-					//console.log(checkboxes);
-					//console.log(this.checkBoxes[el.device_id]);
-					//console.log(el.device_ip);
+					let checkboxes = document.getElementById(`switch${d.building_id}${el.device_id}`).querySelector('input[type=checkbox]');
+					let status = document.getElementById(`status${d.building_id}${el.device_id}`);
+
 					axios.get(`http://${el.device_ip}`).then(res=>{
 						console.log(res.data);
 						if(res.data === 'ON'){
-							this.bulbStatus = true;
-							//this.checkBoxes[el.device_id] = true;
-							console.log('TURNING ON');
-						}else{
-							this.checkBoxes[el.device_id] = false;
-							//this.bulbStatus = true;
-							console.log('TURNING OFF');
+							checkboxes.checked = true;
+							status.innerHTML = 'ONLINE';
+							status.className = 'online';
 
+						}else{
+							checkboxes.checked = false;
+							status.innerHTML = 'OFFLINE';
+							status.className = 'offline';
 						}
 					})
+
+					
+
 				});
 			});
 			
 		},
 
 		test(){
-			let checkboxes = document.getElementById('switch[0][4]');
-			//console.log(checkboxes.querySelector('input[type=checkbox]'));
-			//console.log(checkboxes.value);
+
+			let checkboxes = document.getElementById('switch04').querySelector('input[type=checkbox]');
+			//this.checkBoxes['device4'] = false;
+			checkboxes.checked = true;
+			
+			//console.log(checkboxes);
+			//this.checkValue['device4'] = true;
+
+			// let checkboxes = document.getElementById('testcheck')
+			
+			// console.log(checkboxes);
+
+			// checkboxes.checked = true;
 		}
 	},
 
-	mounted(){
+	created(){
 		this.initData();
 
+	},
+
+	mounted(){
+		
 		window.setInterval(() => {
 			this.getNotifications()
 		}, 30000);
 
-		this.test();
+
+
+		//this.test();
 		
 	}
 }
@@ -160,5 +187,14 @@ export default {
 			justify-content: center;
 			align-items: center;
 		}
+	}
+
+	.online{
+		font-weight: bold;
+		color: green;
+	}
+	.offline{
+		font-weight: bold;
+		color: red;
 	}
 </style>

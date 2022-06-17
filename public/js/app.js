@@ -7964,33 +7964,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       mark: 'OFF',
       buildings: [],
-      checkBoxes: [],
-      bulbStatus: false
+      checkBoxes: {},
+      checkValue: {},
+      switchValue: null
     };
   },
   methods: {
     switch1: function switch1() {
       axios__WEBPACK_IMPORTED_MODULE_0___default().post('/').then(function (res) {});
     },
-    invokeSwitch: function invokeSwitch(evt, data, index, ix) {
-      var token = ''; // console.log(data.room_id);
-      // var swQ = document.querySelector("switch").querySelectorAll('checkbox');
-      // var sw = document.getElementById(data.room_id);
-      // console.log(sw);
-      // console.log(swQ);
+    invokeSwitch: function invokeSwitch(evt, building, data) {
+      var token = '';
+      var status = document.getElementById("status".concat(building.building_id).concat(data.device_id));
 
       if (evt) {
         token = data.device_token_on;
+        status.innerHTML = 'ONLINE';
         axios__WEBPACK_IMPORTED_MODULE_0___default().get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON');
       } else {
         token = data.device_token_off;
         axios__WEBPACK_IMPORTED_MODULE_0___default().get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF');
+        status.innerHTML = 'OFFLINE';
       }
 
       fetch("http://".concat(data.device_ip, "/").concat(token)); //axios.get('/test-switch')
@@ -8003,46 +8009,47 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getNotifications: function getNotifications() {
-      var _this2 = this;
-
       //dere ang codes
       this.buildings.forEach(function (d) {
         //foreach devices
         d.devices.forEach(function (el) {
-          //console.log(el);
-          //let checkboxes = document.querySelector('input[type=checkbox]');
-          //console.log(checkboxes);
-          //console.log(this.checkBoxes[el.device_id]);
-          //console.log(el.device_ip);
+          var checkboxes = document.getElementById("switch".concat(d.building_id).concat(el.device_id)).querySelector('input[type=checkbox]');
+          var status = document.getElementById("status".concat(d.building_id).concat(el.device_id));
           axios__WEBPACK_IMPORTED_MODULE_0___default().get("http://".concat(el.device_ip)).then(function (res) {
             console.log(res.data);
 
             if (res.data === 'ON') {
-              _this2.bulbStatus = true; //this.checkBoxes[el.device_id] = true;
-
-              console.log('TURNING ON');
+              checkboxes.checked = true;
+              status.innerHTML = 'ONLINE';
+              status.className = 'online';
             } else {
-              _this2.checkBoxes[el.device_id] = false; //this.bulbStatus = true;
-
-              console.log('TURNING OFF');
+              checkboxes.checked = false;
+              status.innerHTML = 'OFFLINE';
+              status.className = 'offline';
             }
           });
         });
       });
     },
     test: function test() {
-      var checkboxes = document.getElementById('switch[0][4]'); //console.log(checkboxes.querySelector('input[type=checkbox]'));
-      //console.log(checkboxes.value);
+      var checkboxes = document.getElementById('switch04').querySelector('input[type=checkbox]'); //this.checkBoxes['device4'] = false;
+
+      checkboxes.checked = true; //console.log(checkboxes);
+      //this.checkValue['device4'] = true;
+      // let checkboxes = document.getElementById('testcheck')
+      // console.log(checkboxes);
+      // checkboxes.checked = true;
     }
   },
-  mounted: function mounted() {
-    var _this3 = this;
-
+  created: function created() {
     this.initData();
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
     window.setInterval(function () {
-      _this3.getNotifications();
-    }, 30000);
-    this.test();
+      _this2.getNotifications();
+    }, 30000); //this.test();
   }
 });
 
@@ -31882,7 +31889,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.box-head[data-v-88d09ee4]{\n\tfont-size: 1.5em;\n\tfont-weight: bold;\n\tmargin: 0 0 25px 0;\n}\n.box[data-v-88d09ee4]{\n\tpadding-bottom: 25px;\n\tmargin: 15px;\n}\n.building-container[data-v-88d09ee4]{\n\tdisplay: flex;\n\tjustify-content: center;\n}\n.building[data-v-88d09ee4]{\n\twidth: 300px;\n}\n@media only screen and (max-width: 600px) {\n.building-container[data-v-88d09ee4]{\n\t\tflex-direction: column;\n\t\tjustify-content: center;\n\t\talign-items: center;\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.box-head[data-v-88d09ee4]{\n\tfont-size: 1.5em;\n\tfont-weight: bold;\n\tmargin: 0 0 25px 0;\n}\n.box[data-v-88d09ee4]{\n\tpadding-bottom: 25px;\n\tmargin: 15px;\n}\n.building-container[data-v-88d09ee4]{\n\tdisplay: flex;\n\tjustify-content: center;\n}\n.building[data-v-88d09ee4]{\n\twidth: 300px;\n}\n@media only screen and (max-width: 600px) {\n.building-container[data-v-88d09ee4]{\n\t\tflex-direction: column;\n\t\tjustify-content: center;\n\t\talign-items: center;\n}\n}\n.online[data-v-88d09ee4]{\n\tfont-weight: bold;\n\tcolor: green;\n}\n.offline[data-v-88d09ee4]{\n\tfont-weight: bold;\n\tcolor: red;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -35133,31 +35140,21 @@ var render = function () {
                                 "b-switch",
                                 {
                                   attrs: {
-                                    value: false,
                                     id:
-                                      "switch[" +
-                                      index +
-                                      "][" +
-                                      i.room_id +
-                                      "]",
+                                      "switch" + item.building_id + i.device_id,
                                     type: "is-success",
                                   },
                                   on: {
                                     input: function ($event) {
-                                      return _vm.invokeSwitch(
-                                        $event,
-                                        i,
-                                        index,
-                                        ix
-                                      )
+                                      return _vm.invokeSwitch($event, item, i)
                                     },
                                   },
                                   model: {
-                                    value: _vm.checkBoxes[i.device_id],
+                                    value: i.s,
                                     callback: function ($$v) {
-                                      _vm.$set(_vm.checkBoxes, i.device_id, $$v)
+                                      _vm.$set(i, "s", $$v)
                                     },
-                                    expression: "checkBoxes[i.device_id]",
+                                    expression: "i.s",
                                   },
                                 },
                                 [
@@ -35172,9 +35169,16 @@ var render = function () {
                             1
                           ),
                           _vm._v(" "),
-                          _vm.bulbStatus
-                            ? _c("div", [_vm._v("ONLINE")])
-                            : _c("div", [_vm._v("OFFLINE")]),
+                          _c(
+                            "div",
+                            {
+                              staticClass: "offline",
+                              attrs: {
+                                id: "status" + item.building_id + i.device_id,
+                              },
+                            },
+                            [_vm._v("OFFLINE")]
+                          ),
                         ],
                         1
                       )
